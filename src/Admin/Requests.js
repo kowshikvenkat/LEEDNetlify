@@ -325,7 +325,6 @@ id:value['_id']
       )}
      </div>
     </div><br /> */}
-
            <label htmlFor="">Registeration Form(Upload Link):</label>
 <input onChange={(e)=>setLink(e.target.value)} type="text" required/> <br />
     

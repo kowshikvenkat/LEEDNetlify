@@ -11,8 +11,10 @@ import Home from './Views/home';
 import Events from './Views/events';
 import Eventregister from './Views/eventregister';
 import LEEDevents from './Views/LEEDevents';
-
-
+import logo from './Assets/logo.png'
+import { Line, Circle } from 'rc-progress';
+import { Progress } from 'react-sweet-progress';
+import "react-sweet-progress/lib/style.css";
 const cryptojs = require("crypto-js")
 
 
@@ -21,7 +23,9 @@ const cryptojs = require("crypto-js")
 
 function App() {
    const[ignored,forceUpdate] = React.useReducer(x=>x+1,0)
+     const [isLoading, setIsLoading] = React.useState(true);
   const[Email,setEmail] = React.useState("")
+  const[timer,settimer] = React.useState(0)
     let location = useLocation()
     let navigate = useNavigate()
 
@@ -40,6 +44,7 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
     navigate("/login")
   }
   }
+  
 //   if(location.pathname=="/Kct/Leed/Admin"){
 //      if(sessionStorage.getItem('email')!==null&&sessionStorage.getItem('email')!==undefined){
 //    var bytesemail =  cryptojs.AES.decrypt(sessionStorage.getItem('email'),'kowshik123')
@@ -47,6 +52,19 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
 //   }
 
  })
+React.useEffect(() => {
+    // Simulate loading time
+    if(sessionStorage.getItem('isloading')==undefined||sessionStorage.getItem('isloading')==null){
+ setTimeout(() => {
+      setIsLoading(false);
+    sessionStorage.setItem('isloading',false)
+    }, 3000);
+    setInterval(()=>{
+settimer((prev)=>prev+30)
+
+      },900)
+    }
+  },[]);
 
 // function ValidateLoginForSharkTank(a,b,c){
 //   console.log("validating login")
@@ -69,7 +87,23 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
   return (
   
     <div className="App ">
-     <NavInApp />
+    {(sessionStorage.getItem('isloading')==undefined||sessionStorage.getItem('isloading')==null)?<div className='LoadingImageContainer'>
+     <img src={logo} className='LoadingImage' alt="" /> <br />
+    <div class="loading">
+    
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div> <br />
+
+      <Line  style={{width:'60%'}} percent={timer} strokeWidth={1} strokeColor="green" />
+    </div>:
+     <>
+      <NavInApp />
      <Routes>
     <Route exact path="/" element={  <Home />} />
 <Route exact path="/login" element={<Login />}/>
@@ -79,6 +113,7 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
 <Route path="/allevents" element={<LEEDevents />} />
   <Route path="/eventregister" element={<Eventregister /> }/>
 </Routes>
+     </>}
     </div>
   );
 }

@@ -22,7 +22,7 @@ axios({
   
   }).then(res=>{
 setverifiedevents(res.data.docs)
-
+console.log(res.data.docs)
   })
   },[])
   React.useEffect(()=>{
@@ -41,15 +41,45 @@ const localizer = dateFnsLocalizer({
 React.useEffect(()=>{
 
   verifiedevents.map((val,ind)=>{
+    console.log(new Date(val['Date']))
     var eventobject = {
     allday:true,
 title:val['Title'],
-start: new Date(val['Date'].slice(0,4),(val['Date'].slice(5,6)!=0?val['Date'].slice(5,7):val['Date'].slice(6,7)),(val['Date'].slice(8,9)!=0?val['Date'].slice(8,10):val['Date'].slice(9,10))) ,
-end:new Date(val['Date'].slice(0,4),(val['Date'].slice(5,6)!=0?val['Date'].slice(5,7):val['Date'].slice(6,7)),(val['Date'].slice(8,9)!=0?val['Date'].slice(8,10):val['Date'].slice(9,10)))}
+start: new Date(val['Date']) ,
+end:new Date(val['Date']),
+description:val['Desc'],
+}
 setevents((prev)=>!prev.includes(eventobject)&&prev.concat(eventobject))
 
   })
 },[verifiedevents])
+function eventPropGetter(event, start, end, isSelected) {
+  const backgroundColor = 'green'
+  const style = {
+    backgroundColor,
+    borderRadius: '5px',
+    opacity: 0.8,
+    color: 'white',
+    border: 'none',
+    display: 'block',
+    textAlign: 'center',
+  };
+  return {
+    style,
+  };
+}
+
+function dayPropGetter(date) {
+  const backgroundColor = 'rgba(200,200,300,0.6)'; // set the background color here
+  const style = {
+    backgroundColor,
+    margin:'1px',
+  borderTopLeftRadius:'10px'
+  };
+  return {
+    style,
+  };
+}
   return (
     <div>
 <h1>Events</h1>
@@ -59,7 +89,10 @@ localizer={localizer}
 startAccessor="start"
 endAccessor="end"
 events={events}
- style={{height:700,width:"90vw",border:'2px solid blue',borderRadius:'20px',overflow:'hidden',padding:'2%'}}/>
+ style={{height:700,width:"90vw",border:'2px solid blue',borderRadius:'20px',overflow:'hidden',padding:'2%',}}
+   eventPropGetter={eventPropGetter}
+       dayPropGetter={dayPropGetter}
+ />
 </div>
 <div>
   <Link to="/eventregister">Register For Your Event </Link> <br />

@@ -5,7 +5,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Container from 'react-bootstrap/Container';
+import logopic from '../Assets/logo.png'
+import signoutpic from "../Assets/sign-out.png"
+import './nav.css';
 const cryptojs = require("crypto-js")
+
 function NavInApp() {
   let location = useLocation()
     const[ignored,forceUpdate] = React.useReducer(x=>x+1,0)
@@ -37,10 +41,11 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
         listStyleType:"none",
        width:"100%"
     }
+  
   return (
     <div style={nav}>
     {/* <ul className='d-flex bg-info justify-content-evenly align-items-center' style={nav}>
-        <li><Link to="/" >HOME</Link></li>
+        <Link to="/" >HOME</Link></li>
         <li>About Us</li>
         <li>Events</li>
         <li>Contact</li>
@@ -52,39 +57,33 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
         </Link>:<Link to="/login">Login</Link>} </li>
   
     </ul> */}
-<Navbar bg="info" expand="lg">
+<Navbar style={{backgroundColor:'#4CBB17',boxShadow:'0 0 20px grey'}} expand="md">
       <Container fluid>
-        <Navbar.Brand href="#home">KCT-LEED</Navbar.Brand>
+        <Navbar.Brand className='logo' style={{width:'20%',height:'70px'}} href="#home"><img src={logopic} style={{width:"100%",height:"100%",backgroundColor:'white',margin:0,objectFit:'contain'}} alt="" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto d-flex justify-content-around w-100">
-            <Nav.Link > <li><Link to="/" >HOME</Link></li></Nav.Link>
-            <Nav.Link >     <li>About Us</li></Nav.Link>
-             <Nav.Link >       <li><Link to='/events'>EVENTS</Link></li></Nav.Link>
-              <Nav.Link >      <li>Contact</li></Nav.Link>
-               <Nav.Link >        <li>   <Link to="/sharktank" >SHARKTANK</Link> </li></Nav.Link>
-                  <Nav.Link >           <li >{userName.length>0?<Link to="/login" >
-        <div className="d-flex align-items-center ">
-          <img src={userProfilePic} style={{borderRadius:"50%",width:40,height:40}} alt=""  />&nbsp;
-          <div className=''>{userName}</div></div>
-        </Link>:<Link to="/login">Login</Link>} </li></Nav.Link>
-            {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item n/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
+            <Nav.Link className='navitems' style={{color:'white'}}> <Link style={{color:'white',textDecoration:'none'}} to="/" >HOME</Link></Nav.Link>
+            <Nav.Link className='navitems' style={{color:'white',textDecoration:'none'}}>     ABOUT US</Nav.Link>
+             <Nav.Link className='navitems'>       <Link style={{color:'white',textDecoration:'none'}} to='/events'>EVENTS</Link></Nav.Link>
+              <Nav.Link className='navitems' style={{color:'white',textDecoration:'none'}}>      CONTACT</Nav.Link>
+               
+               <Nav.Link className='navitems'>           <Link style={{color:'white',textDecoration:'none'}} to="/sharktank" >SHARKTANK</Link> </Nav.Link>
+                
+          <Nav.Link className={userName.length==0&&'navitems'}>           <li >{userName.length>0?
+                   <NavDropdown style={{marginRight:40,marginTop:-10}} title={<i style={{color:'white',textDecoration:'underline'}}>Kowshik</i>} id="basic-nav-dropdown">
+           
+              <NavDropdown.Item  href="#action/3.2">
+           <div className="d-flex">   <img src={userProfilePic} style={{borderRadius:"50%",width:30,height:30}} alt=""  /><div className='mx-1'>{userName}</div></div>
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+     <NavDropdown.Item href="#action/3.1">  </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
-                Separated link
+               <div className="d-flex"><img src={signoutpic}className='my-1' width="20" height="20" alt="" /> <Link className='mx-1 ' to="/login" >SIGN OUT</Link></div>
               </NavDropdown.Item>
-            </NavDropdown> */}
-            
-   
-      
+            </NavDropdown>
        
-        
-  
+       :<Link  style={{color:'white',textDecoration:'none'}} to="/login">LOGIN</Link>} </li></Nav.Link>
           </Nav>
         </Navbar.Collapse>
    </Container>
