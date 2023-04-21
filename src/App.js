@@ -104,7 +104,9 @@ settimer((prev)=>prev+30)
     </div>:
      <>
       <NavInApp />
-     <Routes>
+      
+  <div style={{marginTop:'100px',width:'100%'}}>
+       <Routes>
     <Route exact path="/" element={  <Home />} />
 <Route exact path="/login" element={<Login />}/>
     <Route exact path="/sharktank" element={Email=="kowshik.20ei@kct.ac.in"?<Sharktankexpert />:<Sharktank />} /> 
@@ -113,6 +115,7 @@ settimer((prev)=>prev+30)
 <Route path="/allevents" element={<LEEDevents />} />
   <Route path="/eventregister" element={<Eventregister /> }/>
 </Routes>
+  </div>
      </>}
     </div>
   );

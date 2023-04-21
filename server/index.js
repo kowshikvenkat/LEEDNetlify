@@ -378,9 +378,15 @@ app.get("/verifiedevents",(req,res)=>{
 const EventSchema = new mongoose.Schema({
   title:String,
   desc:String,
-  date:String,
+  startdate:String,
+  enddate:String,
+  venue:String,
   link:String,
+  quotes:String,
+  info:[],
+  benefits:[],
   email:String,
+  video:[],
   pic:[],
   pdf:[]
 })
@@ -389,7 +395,10 @@ const VerifiedEventModel = mongoose.model('verifiedKCTLEEDevents',EventSchema)
 let LEEDEVENTobj = {
   title:"",
   desc:"",
-  date:"",
+  startdate:"",
+  enddate:"",
+  venue:"",
+  quotes:"",
   link:"",
   email:"",
   
@@ -399,11 +408,18 @@ app.post("/pendingLEEDevent",(req,res)=>{
  
       LEEDEVENTobj.title = req.body.title
     LEEDEVENTobj.desc = req.body.desc
-      LEEDEVENTobj.date = req.body.date
+      LEEDEVENTobj.startdate = req.body.startdate
+        LEEDEVENTobj.enddate = req.body.enddate
         LEEDEVENTobj.link = req.body.link
+        LEEDEVENTobj.venue = req.body.venue
+LEEDEVENTobj.quotes = req.body.quotes
+  LEEDEVENTobj.info = req.body.info
+    LEEDEVENTobj.benefits = req.body.benefits
               LEEDEVENTobj.email = req.body.email 
    LEEDEVENTobj.pic = req.body.pic
    LEEDEVENTobj.pdf = req.body.pdf
+     LEEDEVENTobj.video = req.body.video
+
 console.log(req.body.pic.length)
    EventModel.create(LEEDEVENTobj).then(console.log("Added to pendingLEEDevents"))
 })
@@ -433,6 +449,10 @@ EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending L
 })
 app.post("/rejectKCTLEEDevents",(req,res)=>{
   EventModel.findOne({_id:req.body.id},function(err,docs){
+     docs['video'].map((val,ind)=>{ 
+      const result = cloudinary.uploader.destroy(val['public_id'])
+      console.log(result)
+    })
     docs['pic'].map((val,ind)=>{ 
       const result = cloudinary.uploader.destroy(val['public_id'])
       console.log(result)
@@ -442,7 +462,6 @@ app.post("/rejectKCTLEEDevents",(req,res)=>{
        EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending LEED evsnts"))
 })
 app.get("/getverifiedLEEDevents",(req,res)=>{
-  console.log("hi boss")
   VerifiedEventModel.find({},function(err,docs){
     res.send({docs:docs})
   })

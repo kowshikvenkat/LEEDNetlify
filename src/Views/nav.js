@@ -39,7 +39,9 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
 
     const nav={
         listStyleType:"none",
-       width:"100%"
+       width:"100vw",
+       position:'fixed',
+       zIndex:10000000,
     }
   
   return (

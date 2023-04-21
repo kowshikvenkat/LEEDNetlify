@@ -7,98 +7,40 @@ import getDay from 'date-fns/getDay';
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import axios from 'axios';
 import "react-datepicker/dist/react-datepicker.css"
-
+import Switch from "react-switch";
 import { Link,Outlet,useNavigate } from 'react-router-dom';
-
+import GeneralEvents from './generalevents';
+import LEEDevents from './LEEDevents';
 function Events() {
   const navigate = useNavigate()
 const[verifiedevents,setverifiedevents] = React.useState([])
 const[events,setevents] = React.useState([])
-  React.useEffect(()=>{
-    
-axios({
-    method: "GET",
-    url: "http://localhost:5000/verifiedevents",
-  
-  }).then(res=>{
-setverifiedevents(res.data.docs)
-console.log(res.data.docs)
-  })
-  },[])
-  React.useEffect(()=>{
-
-  })
-const locales = {
-  "en-US":require("date-fns/locale/en-US")
-}
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales
-})
-React.useEffect(()=>{
-
-  verifiedevents.map((val,ind)=>{
-    console.log(new Date(val['Date']))
-    var eventobject = {
-    allday:true,
-title:val['Title'],
-start: new Date(val['Date']) ,
-end:new Date(val['Date']),
-description:val['Desc'],
-}
-setevents((prev)=>!prev.includes(eventobject)&&prev.concat(eventobject))
-
-  })
-},[verifiedevents])
-function eventPropGetter(event, start, end, isSelected) {
-  const backgroundColor = 'green'
-  const style = {
-    backgroundColor,
-    borderRadius: '5px',
-    opacity: 0.8,
-    color: 'white',
-    border: 'none',
-    display: 'block',
-    textAlign: 'center',
+  const [checked, setChecked] = React.useState(false);
+  const handleChange = nextChecked => {
+    setChecked(nextChecked);
   };
-  return {
-    style,
-  };
-}
-
-function dayPropGetter(date) {
-  const backgroundColor = 'rgba(200,200,300,0.6)'; // set the background color here
-  const style = {
-    backgroundColor,
-    margin:'1px',
-  borderTopLeftRadius:'10px'
-  };
-  return {
-    style,
-  };
-}
+ 
   return (
     <div>
-<h1>Events</h1>
+<h1>LEED Events</h1>
 <div>
-  <Calendar
-localizer={localizer}
-startAccessor="start"
-endAccessor="end"
-events={events}
- style={{height:700,width:"90vw",border:'2px solid blue',borderRadius:'20px',overflow:'hidden',padding:'2%',}}
-   eventPropGetter={eventPropGetter}
-       dayPropGetter={dayPropGetter}
- />
+<div className="d-flex justify-content-center ">
+  <Switch 
+  onChange={handleChange}
+   checkedIcon={false}
+   checked={checked}
+    uncheckedIcon={false}
+/>&nbsp;&nbsp;{checked&&<p className='mt-1' style={{fontSize:15,color:'grey'}}>LEED EVENTS</p>}
+</div>
+{!checked?<>
+  <GeneralEvents />
+<Link to="/eventregister">Register For Your Event </Link> <br />
+</>:  <LEEDevents />}
+
 </div>
 <div>
-  <Link to="/eventregister">Register For Your Event </Link> <br />
-<Link to="/allevents">ALL EVENTS TODAY</Link> <br />
 </div>
-<Outlet />
+
     </div>
   )
 }
