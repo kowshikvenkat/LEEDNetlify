@@ -2,8 +2,7 @@ const express = require("express"),
   app = express(),
   port = process.env.PORT || 5000,
   cors = require("cors");
-var fs = require("fs")
-var path = require("path")
+
 
 const cloudinary = require('cloudinary').v2;
 cloudinary.config({
@@ -61,8 +60,6 @@ const Userschema = new mongoose.Schema({
 const User = mongoose.model('pendingpitches',Loginschema)
 const User2 = mongoose.model('verifiedpitches',Loginschema)
 const User3 =mongoose.model('users',Userschema)
-
-
 
 
 app.post('/createuser',(req,res)=>{
@@ -242,15 +239,10 @@ if(duplicatevalue.length==0)
 
 if(user.length==docs.length)
 {
- 
    res.send({verifieddata:user})
 }
-
 }
-
-       })
-    
-       
+       })   
   })
 }else{
    let newuser=
@@ -277,9 +269,7 @@ if(user.length>0&& user[0]['_id']!=newuser['_id']){
 if(user.length==docs.length)
    res.send({verifieddata:user})}
 })
-
 })
- 
   })
 })
 app.post('/updatecommentverifiedpitch',(req,res)=>{
@@ -333,7 +323,6 @@ console.log(docs)
 })
 })
 app.post("/getuser",(req,res)=>{
-  let saveddata = []
   req.body.saved.map((value,index)=>{
 User2.find({_id:value},)
   })
@@ -344,17 +333,22 @@ const RegisterSchema = new mongoose.Schema({
        Email:String,
        Title:String,
        Desc:String,
-       Date:Date 
+       Link:String,
+       Date:String,
+       endDate:String ,
+       admin:String
 })
 const RegisterUser = mongoose.model('pendingregisters',RegisterSchema)
-const AcceptRegisterUser = mongoose.model('pendingregisters',RegisterSchema)
+const AcceptRegisterUser = mongoose.model('verifiedeventregisters',RegisterSchema)
 app.post("/requestevent",(req,res)=>{
   let user = {
      Institution:req.body.Institution,
        Email:req.body.Email,
        Title:req.body.Title,
        Desc:req.body.Desc,
-       Date:req.body.Date 
+       Link:req.body.Link,
+       Date:req.body.startDate ,
+       endDate:req.body.endDate,
   }
 RegisterUser.insertMany(user).then((res)=>console.log("added to pending registers"))
 
@@ -367,8 +361,29 @@ app.get("/getpendingregisters",(req,res)=>{
 app.post("/accepteventrequest",(req,res)=>{
 RegisterUser.findOne({_id:req.body.id},function(err,docs){
 
-  AcceptRegisterUser.create(docs).then(res=>console.log("added to verified events"))
+if(docs){
+    if(docs.admin&&docs.admin!=req.body.email){
+      AcceptRegisterUser.insertMany(docs).then(res=>console.log("added to verified events"))
+  RegisterUser.findOneAndDelete({_id:req.body.id},function(err,docs){
+        console.log("deleted from pending registers")
+      })
+  }else{
+RegisterUser.findOneAndUpdate({_id:req.body.id}, {$set:{admin:req.body.email}}).then((res)=>console.log("1 admin accepted"))
+  }
+}else if(!docs){
+  console.log("no document found")
+}
 })
+})
+app.post("/rejecteventrequest",(req,res)=>{
+  RegisterUser.findOneAndDelete({_id:req.body.id},function(err,docs){
+    if(err){
+      console.log(err)
+    }else if(!docs){
+      console.log("no document found")
+    }else{
+        console.log("deleted from pending registers")
+}})
 })
 app.get("/verifiedevents",(req,res)=>{
   AcceptRegisterUser.find({},function(err,docs){
@@ -463,6 +478,40 @@ app.post("/rejectKCTLEEDevents",(req,res)=>{
 })
 app.get("/getverifiedLEEDevents",(req,res)=>{
   VerifiedEventModel.find({},function(err,docs){
+    res.send({docs:docs})
+  })
+})
+const BlockSchema = new mongoose.Schema({
+  admin:String,
+Useremail:String,
+BlockedUsers:[String]
+})
+const PendingBlockModel = mongoose.model('pendingblockuser',BlockSchema)
+const BlockModel = mongoose.model('verifiedblockedusers',BlockSchema)
+app.post("/requestblockuser",(req,res)=>{
+  console.log("hhihiobjhdsfjvdsjcvdskjbdskvcbdsk")
+  let obj = {
+    admin:req.body.email,
+    Useremail:req.body.UserEmail
+  }
+
+PendingBlockModel.insertMany(obj).then(console.log("block request added to pending")).catch(err=>console.log(err))
+})
+app.get("/getpendingblockedusers",(req,res)=>{
+    PendingBlockModel.find({},function(err,docs){
+    res.send({docs:docs})
+  })
+})
+app.post("/acceptblockuser",(req,res)=>{
+  PendingBlockModel.findOne({_id:req.body.id},function(err,docs){
+if(docs){
+  PendingBlockModel.findOneAndDelete({_id:req.body.id}).then(console.log("User removed from pending block"))
+  BlockModel.findOneAndUpdate({_id:'645d2634357536481927cf39'},{$push:{BlockedUsers:docs.Useremail}}).then(console.log("User Blocked"))
+}
+  })
+})
+app.get("/getverifiedblockedusers",(req,res)=>{
+    BlockModel.find({},function(err,docs){
     res.send({docs:docs})
   })
 })

@@ -15,6 +15,7 @@ import logo from './Assets/logo.png'
 import { Line, Circle } from 'rc-progress';
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
+import ImageHolderHome from './Models/imageHolderHome';
 const cryptojs = require("crypto-js")
 
 
@@ -45,12 +46,6 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
   }
   }
   
-//   if(location.pathname=="/Kct/Leed/Admin"){
-//      if(sessionStorage.getItem('email')!==null&&sessionStorage.getItem('email')!==undefined){
-//    var bytesemail =  cryptojs.AES.decrypt(sessionStorage.getItem('email'),'kowshik123')
-// setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))}
-//   }
-
  })
 React.useEffect(() => {
     // Simulate loading time
@@ -66,22 +61,6 @@ settimer((prev)=>prev+30)
     }
   },[]);
 
-// function ValidateLoginForSharkTank(a,b,c){
-//   console.log("validating login")
-//   if(sessionStorage.getItem('email')!==null&&sessionStorage.getItem('email')!==undefined){
-//     console.log("email present")
-//     var bytesemail =  cryptojs.AES.decrypt(sessionStorage.getItem('email'),'kowshik123')
-// setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
-// if(Email=="kowshik.20ei@kct.ac.in")
-// return a
-// else
-// return b
-//    }
-//   else{
-//     console.log("no email present")
-
-//   }
-// }
 
 
   return (
@@ -102,10 +81,10 @@ settimer((prev)=>prev+30)
 
       <Line  style={{width:'60%'}} percent={timer} strokeWidth={1} strokeColor="green" />
     </div>:
-     <>
+     <div style={{    backgroundColor: 'rgba(237, 239, 236, 0.8)',width:'100%'}}>
       <NavInApp />
       
-  <div style={{marginTop:'100px',width:'100%'}}>
+  <div style={{marginTop:'70px',width:'100%'}}>
        <Routes>
     <Route exact path="/" element={  <Home />} />
 <Route exact path="/login" element={<Login />}/>
@@ -116,7 +95,7 @@ settimer((prev)=>prev+30)
   <Route path="/eventregister" element={<Eventregister /> }/>
 </Routes>
   </div>
-     </>}
+     </div>}
     </div>
   );
 }

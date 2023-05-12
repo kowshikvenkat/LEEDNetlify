@@ -73,7 +73,7 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
                <Nav.Link className='navitems'>           <Link style={{color:'white',textDecoration:'none'}} to="/sharktank" >SHARKTANK</Link> </Nav.Link>
                 
           <Nav.Link className={userName.length==0&&'navitems'}>           <li >{userName.length>0?
-                   <NavDropdown style={{marginRight:40,marginTop:-10}} title={<i style={{color:'white',textDecoration:'underline'}}>Kowshik</i>} id="basic-nav-dropdown">
+                   <NavDropdown style={{marginRight:40,marginTop:-10}} title={<i style={{color:'white',textDecoration:'underline'}}>{userName}</i>} id="basic-nav-dropdown">
            
               <NavDropdown.Item  href="#action/3.2">
            <div className="d-flex">   <img src={userProfilePic} style={{borderRadius:"50%",width:30,height:30}} alt=""  /><div className='mx-1'>{userName}</div></div>

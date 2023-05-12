@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+*{
+  scroll-behavior: smooth;
+}
 .App {
   text-align: center;
   width: 100vw;
@@ -10,7 +18,9 @@
 }
 body{
 overflow-x: hidden;
+
 }
+
 /* .App-logo {
   height: 40vmin;
   pointer-events: none;

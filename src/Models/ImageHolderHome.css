@@ -1,0 +1,29 @@
+
+.imgHolderBgImage {
+    width: 60%;
+    height: 20%;
+    object-fit: contain;
+}
+.transition_h1{
+    font-size: 250%;
+}
+@media only screen and (max-width:800px) and (min-width:400px) {
+    .imgHolderBgImage {
+        width: 80%;
+        height: 20%;
+
+    }
+         .transition_h1 {
+             font-size: 180%;
+         }
+}
+@media only screen and (max-width:400px) {
+        .imgHolderBgImage {
+                width: 100%;
+                
+        
+            }
+                        .transition_h1 {
+                            font-size: 100%;
+                        }
+}

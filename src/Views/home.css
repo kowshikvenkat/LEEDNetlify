@@ -11,17 +11,18 @@ margin-right:8vw
 .imageHolder_Home{
     width:100vw;
     height:150vh;
-  position: relative;
     background-image:linear-gradient(to bottom,rgba(0,0,0,0.6),rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.3)), url(../Assets/Kctimage.jpeg);
     background-position:bottom;
     background-repeat: no-repeat;
     background-size:cover;
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 .corouselprovider{
 
-    position: absolute;
-    bottom:10px;
+margin-bottom: 1%;
     width: 100%;
 }
 .card_button{
@@ -48,13 +49,16 @@ box-shadow: 5px 0 5px -5px grey,0 5px 5px -5px grey,-5px 0 5px -5px grey;
 padding: 2%;
   align-items:center ;
   width: 85%;
-  position: relative;
-  height:400px;
+  height:max-content;
   transition: 1.5s;
 
 }
 .home_sharktank div{
+    justify-content: center;
+
+    width: 100%;
 z-index: 1;
+flex-wrap: wrap;
 }
 .home_sharktank h2{
     align-self:flex-start;
@@ -64,9 +68,10 @@ text-shadow: 1px 1px 0px grey;
 .home_sharktank div div{
 box-shadow: 0 0 10px grey;
 border-radius: 10px;
-    width:30%;
+    width:250px;
     height:fit-content;
     margin-left: 3%;
+    margin-top: 2%;
     cursor: pointer;
     position: relative;
 
@@ -89,7 +94,10 @@ padding-top:10% ;
  position: absolute;
  box-shadow: 0 0 10px black;
 top: 30%;
-left: 40%;
+left: 30%;
+width: fit-content;
+height: fit-content;
+
 }
 
 .home_sharktank div div p{
@@ -100,7 +108,6 @@ height:fit-content;
     transition: 0.2s;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    /* background-color: rgb(235, 250, 225); */
     background-color: whitesmoke;
     padding-top: 10px;
 padding-right: 20px;
@@ -132,22 +139,154 @@ padding-left: 20px;
     top: 0;
     z-index: 1;
 }
+.numberdata_home{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items:flex-start;
+    height: fit-content;
+}
+.numberdata_home div {
+
+    margin: 2%;
+}
+.numberdata_home div div {
+    margin-left: 10%;
+    transition: 0.2s ease-in;
+    color: white;
+    background-color: limegreen;
+}
 .numberdata_home div div:hover{
 background-color: white;
 color: green;
 }
-.numberdata_home div div{
-    transition: 0.2s ease-in;
-color: white;
-    background-color: limegreen;
-}
+
 .img_content_home{
    margin-top: 5%;
-   padding: 5%;
+padding: 5%;
 }
 .img_content_home div{
+display: flex;
+flex-direction: row;
+justify-content: center;   
+}
+.img_content_home div img{
+    object-fit: cover;
+}
+.img_content_home div div{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+footer span{
+    display: flex;
+    flex-direction: row;
+}
+.span_div_home{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    padding-right: 2%;
+}
+.form_div_home form{
+    width: 50%;
+}
+.copyrights_footer{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+@media only screen and (max-width:800px) and (min-width:400px) {
 
+.home_sharktank div div{
+        margin-top: 4%;
+}
+    .home_sharktank button {
+        font-size: 50%;
+        left:35%
+    }
+    .numberdata_home{
 
-  width: 75%;
+            flex-direction: column;
+                justify-content: center;
+align-items: center;
+    }
+  
+.numberdata_home span{
+    margin-top: 10%;
+}
+                  .numberdata_home div {
+        
+                      margin: 2%;
+                  }
+}
+
+@media only screen and (max-width:400px) {
+    .copyrights_footer{
+        margin-left:0 ;
+        margin-right: 0;
+    }
+.home_sharktank div div{
+    width: 200px;
+        margin-top: 5%;
+}
+    .home_sharktank button {
+        font-size: 40%;
+        left: 35%
+    }
+                .numberdata_home {
+        
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+        
+                }
+        
+                .numberdata_home span {
+                    margin-top: 10%;
+                }
+                .numberdata_home div{
+             
+                  margin: 10%;
+                }
+}
+@media only screen and (max-width:500px) {
+
+                        .img_content_home div img{
+object-fit: contain;
+                        }
+}
+@media only screen and (max-width:600px){
+    .form_div_home form {
+            width: 100%;
+        }
+footer span div:nth-child(2) {
+        flex-direction: column;
+        align-items: center;
+    }
+    .img_content_home{
+        padding: 0;
+    }
+    .img_content_home div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
     
+    
+        }
+    
+        .img_content_home div:nth-child(2) {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+    
+    
+        }
+}
+@media only screen and (max-width:700px) {
+    .span_div_home{
+        padding-right: 0;
+    }
+        footer span {
+                flex-direction: column;
+            }
 }
