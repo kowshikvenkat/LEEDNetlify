@@ -25,12 +25,12 @@ export const SidebarEvent = ({choosepicker,bgcolor,helpdesk}) => {
       <CDBSidebar className='border'  textColor={bgcolor!==undefined?'black':'white'} backgroundColor={bgcolor!==undefined?bgcolor:'#333'} opened={false}>
         <CDBSidebarHeader  hideElementOnCollapse prefix={<i className="fa fa-bars fa-large"></i>}>
           <a
-            href="/"
+            href="#"
             className="text-decoration-none"
             style={{ color: 'inherit' }}
           >
             EVENTS SCHEDULED
-          </a>
+          </a><br />{window.innerWidth<800&&<p style={{fontSize:10}} className='text-secondary'>Close this bar to view events</p>}
         </CDBSidebarHeader>
 
         <CDBSidebarContent textColor={bgcolor!==undefined?'black':'white'} className="sidebar-content">
@@ -63,7 +63,8 @@ export const SidebarEvent = ({choosepicker,bgcolor,helpdesk}) => {
             }}
              onClick={()=>{setActiveMenu('helpdesk');helpdesk(true)}}
           >
-         <CDBIcon fab size='lg' border icon="stack-overflow"/> Help Desk
+          
+         <CDBIcon fab size='lg' border icon="stack-overflow"/> <p>HELP DESK</p>
           </div>
         </CDBSidebarFooter>
       </CDBSidebar>

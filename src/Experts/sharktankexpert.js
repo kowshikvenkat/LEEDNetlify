@@ -1,155 +1,128 @@
 import React from 'react'
-import '../Views/sharktank.css'
+import leedimg from '../Assets/logo.png'
+import Modal from 'react-bootstrap/Modal'
+import '../Views/ST.css'
+import '../Views/ST.css'
 import axios from 'axios'
-import DateToDay from '../Models/DateToDay'
-import uparrow from '../Assets/up-arrow.png'
-import uparrow1 from '../Assets/up-arrow (1).png'
-import commentpic from '../Assets/comment.png'
-import "react-chat-elements/dist/main.css"
-import { MessageBox } from 'react-chat-elements'
-import { ModalComment } from '../Models/modal'
+import { setexpertPitches,setexpertcomments,setexpertreports } from '../Controllers/redux'
+import menupic from '../Assets/open-book.png'
+import { Routes, Route, Link, Outlet } from 'react-router-dom';
+import sidebarcommentpic from '../Assets/chat.png'
+import sidebarreportpic from '../Assets/list.png'
+import Footer from '../Models/footer';
+import { useDispatch } from 'react-redux';
+import helpdeskimg from '../Assets/help.png'
 const cryptojs = require("crypto-js")
-function Sharktankexpert() {
-const [userName,setuserName] = React.useState("")
+function STexpert() {
+const dispatch = useDispatch()
+      const [userName,setuserName] = React.useState("")
 const [Email,setEmail] = React.useState("")
 const [userProfilePic,setUserProfilePic] = React.useState("")
-   const[ignored,forceUpdate] = React.useReducer(x=>x+1,0)
-   const[imgloaded,setimgloaded] = React.useState(false);
-    const[Verifieddata,setverifieddata] = React.useState([])
-      const[Upvoted,setupvote] = React.useState({})
-  const[commentopen,setcommentopen] = React.useState({})
-  
-   React.useEffect(()=>{
-         axios({
-    method: "GET",
-    url: "http://localhost:5000/verifiedpitches",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => {
-   setverifieddata(res.data.verifieddata)
-  });
-   },[])
+const[userid,setuserid] = React.useState("")
+   const[open,setopen] = React.useState(false)
 React.useEffect(()=>{
-  //decrypting  
-  if(sessionStorage.getItem('pic')!==null&&sessionStorage.getItem('pic')!==undefined){
- 
-var bytes = cryptojs.AES.decrypt(sessionStorage.getItem('name'),'kowshik123')
+
+  if(sessionStorage.getItem('email')!==null&&sessionStorage.getItem('email')!==undefined){
+  var bytes = cryptojs.AES.decrypt(sessionStorage.getItem('name'),'kowshik123')
 setuserName(()=> bytes.toString(cryptojs.enc.Utf8))
 var bytesemail =  cryptojs.AES.decrypt(sessionStorage.getItem('email'),'kowshik123')
 setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
 var bytesimage = cryptojs.AES.decrypt(JSON.parse(sessionStorage.getItem('pic')),'kowshik123')
 setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
+var bytesuserid = cryptojs.AES.decrypt(JSON.parse(sessionStorage.getItem('userid')),'kowshik123')
+setuserid(()=>bytesuserid.toString(cryptojs.enc.Utf8))
+  }
 
-}
+},[])
+React.useEffect(()=>{
 
 })
+    React.useEffect(()=>{
+      if(Email){
+       axios.post("http://localhost:5000/expertpitchesST",{
+       email:Email
+    }).then((res)=>{
+dispatch(setexpertPitches(res.data.docs))
 
+   })
+     axios.post("http://localhost:5000/commentSTexpert",{
+  email:Email
+}).then((res)=>dispatch(setexpertcomments(res.data.docs)))
+  axios.post("http://localhost:5000/reportsexpertST",{
+  email:Email
+}).then((res)=>dispatch(setexpertreports(res.data.docs)))
+  }
+    },[Email])
   return (
+    <div className=' ' style={{marginTop:'80px',}}>
+    <div id='SThead'>
+           <h1 style={{fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>DIGITAL SHARKTANK - <img src={leedimg} style={{width:250,height:80}} alt="" /></h1>
+    </div>
+ 
+<div className="d-flex MainST">
+    {window.innerWidth>800?<div style={{flex:0.15,height:'',boxShadow:' 0 0 10px rgba(3, 201, 169, 0.3)'}} className=' border d-flex flex-column justify-content-between'>  
+  <div className="sidebar">
+       <br />
+         <img src={userProfilePic} style={{borderRadius:"50%",width:70,height:70}} alt=""  />
+         <p>{userName}</p>
+        <div style={{padding:5}}>    <Link style={{textDecoration:'none',color:'white'}} className='d-flex justify-content-evenly align-items-center'  to="comments">YOUR COMMENTS <img src={sidebarcommentpic} style={{width:30,height:30,background:'white',padding:2,borderRadius:'50%'}} alt="" /> </Link></div>
+             <hr />
+       <div style={{padding:5}}>    <Link  style={{textDecoration:'none',color:'white'}} className='d-flex justify-content-evenly align-items-center'  to="reports">YOUR REPORTS <img src={sidebarreportpic} style={{width:30,height:30,background:'white',padding:2,borderRadius:'50%'}} alt="" /></Link></div>   
+            <hr />                 
+  </div>
+  <div>
+                <div style={{background:'white',margin:'2%'}}><a className='link-success link-offset-2 link-underline-opacity-25' href="#">HELPDESK</a></div>
+  </div>
+    </div>:
     <div>
-      <h3>EXPERT'S SESSION</h3>
-    <div className='Sharktank'>
-  
-      <div id='User_profile' className='User_profile'>
-        <img width={200} height={200} src={userProfilePic} style={{borderRadius:"50%"}} alt="Profile Pic" onLoad={
-          ()=>setimgloaded(true)
-        }/>
-        <h4>{userName}</h4>
-          <div className='maila' style={{position:'relative'}}>
-               <a href="mailto:kowshikvenkat26@gmail.com" target="_blank">User's mail</a>
-<p className="mailid" style={{bottom:15,left:-20,display:'flex',position:'absolute',backgroundColor:'white',borderRadius:'10px',border:'1px solid black'}}>
-In case couldnt open link, <br />
-Go to Gmail, On right side of URL's address bar, <br />
-click double Diamond ICON ,<br />
-select "Allow to open all links"<br />
-</p>
-           </div>
+<div style={{position:'fixed',top:'100px',left:'5px',borderRadius:'70%',padding:3,background:'rgba(3,201,169,1)',boxShadow:'0 0 10px grey'}} onClick={()=>setopen(true)}>
+    <div style={{height:40,width:40}}>
+         <img src={menupic} style={{width:20,height:20,filter:'invert(100%)'}} alt="" /> <br />
+     <p style={{fontSize:10,color:'white'}}>MENU</p>
+    </div>
+</div>
+
+             <Modal  style={{textAlign:'center',fontFamily:'Inter'}} show={open} onHide={()=>setopen(false)} backdrop="static" size="sm" centered >
+<Modal.Header  closeButton>
+<div className='w-100' style={{textAlign:'center'}}>
+  <Modal.Title  className='text-primary text-center'>
+     <br />
+         <img src={userProfilePic} style={{borderRadius:"50%",marginTop:'0',width:70,height:70}} alt=""  />
+         <p >{userName}</p>
+  </Modal.Title> 
+</div>
+
+</Modal.Header>
+<Modal.Body style={{paddingBottom:0}}>
+<div onClick={()=>setopen(false)}  style={{boxShadow:' 0 0 10px rgba(3, 201, 169, 0.3)'}} className=' border d-flex flex-column justify-content-between'>
+        
+  <div className="sidebar">
+      
+  <div style={{padding:5}}>    <Link style={{textDecoration:'none',color:'white'}} className='d-flex justify-content-evenly align-items-center'  to="comments">YOUR COMMENTS <img src={sidebarcommentpic} style={{width:30,height:30,background:'white',padding:2,borderRadius:'50%'}} alt="" /> </Link></div>
+        <hr />
+       <div style={{padding:5}}>    <Link  style={{textDecoration:'none',color:'white'}} className='d-flex justify-content-evenly align-items-center'  to="reports">YOUR REPORTS <img src={sidebarreportpic} style={{width:30,height:30,background:'white',padding:2,borderRadius:'50%'}} alt="" /></Link></div>  <hr />
             
-            
-                 <p>User Name</p>
-                    <p>User Name</p>
-      </div>
-      <div id='pitch_container' className="pitch_container">
-
-    <div className="pitch"> {Verifieddata.map((value,index)=>
- <div>
-   <div className="d-flex pitch_profile justify-content-between align-items-center">
-     <div className="d-flex">
-       <img src={value['pic']} style={{borderRadius:"50%",width:40,height:40}} alt="" />&nbsp;&nbsp;
-        <i><h4 className='text-muted'>{value['name']}</h4></i>
-     </div>
-     <div className=''>   <i className='text-muted '>{DateToDay(value['createdAt'])}</i></div>
-   </div>
-   
-        <h4>{value['title']}</h4> 
-    <p><pre style={{fontFamily:"inherit"}}>    {value['desc']}</pre> </p>
-       <div className='taskbar d-flex justify-content-around' style={{boxShadow:'0 0 4px grey'}}>
-      <div className='d-flex align-items-center'>
-
-     <button className='btn btn-light' onClick={()=>{if(Upvoted.id!=value['_id'])
-      {
-        setupvote({});setupvote({id:value['_id']})
-      }else{
-        setupvote({})
-      }}} >   <img width={10} height={10} src={Upvoted.id==value['_id']? uparrow1:uparrow} alt="" /></button>
-           <div>{value['count']}</div>
-      </div>
-      <div  onClick={()=>{if(commentopen.id!=value['_id'])
-      {
-        setcommentopen({});setcommentopen({id:value['_id']})
-      }else{
-        setcommentopen({})
-      }
-      }} className='commentsbtn d-flex align-items-center'>
-     <img src={commentpic} width={30} height={30} alt="" />
-        <button className='btn btn-light'>Comments</button>
-      </div>
-    </div>
-    {commentopen.id==value['_id']&&<div className='d-flex flex-column justify-content-center align-items-center'>
-   <div className="w-100 ">
-     {value['comments'].length>0 ?value['comments'].map((val,ind)=>
-<MessageBox 
-  position={'left'}
-  type={'text'}
-  styles={{width:'90%'}}
-  title={<div><img src={val['commentedpic']} width={20} height={20} style={{borderRadius:"50%"}} />
-  {val['commntedname']}
-  </div>}
-  text={val['commenttext']}
+ 
+  <div className='sidebar'>
+ 
+                <div style={{background:'white',margin:'2%'}}><a className='link-success link-offset-2 link-underline-opacity-25' href="#">HELPDESK <img src={helpdeskimg}  style={{width:20,height:20}} alt="" /></a></div>
+  </div>
+    </div></div> <br />
+</Modal.Body>
+     </Modal>
   
-/>
-    ):<i>No comments yet !</i>}
-   </div>
-    <br />
+    </div>
+    }
+    <div style={{flex:window.innerWidth<800?1:0.85,display:'flex',flexDirection:'column',alignItems:'center'}}>
+  <Outlet />
+    </div>
 
-<ModalComment title={value['title']} desc={value['desc']} name={value['name']} pic={value['pic']} peerid={value['_id']} expertid={Email}/>
-    </div>}
-    </div>
-    )} </div>
-    
-      </div>
-      <div id='Other_profile' className="Other_profile">
-         <div style={{fontStyle:'italic'}} className='d-flex flex-column justify-content-around align-items-center h-100 bg-success'>
-       <p> ``Get through all business pitches <br />
-        from other peers </p>
-        <ul  style={{textAlign:'left'}}>
-          <li>Add Pitch</li>
-          <li>Connect</li>
-          <li>Validate your pitch</li>
-          <li>Get experts advice</li>
-        </ul>
- <div  >
-       <q>
-        The best startups generally come from somebody needing to scratch an itch.
-      </q> <br />
-      <p style={{textAlign:'right'}}>-Michael Arrington, TechCrunch founder``</p>
- </div>
-      </div>
-      </div>
-    </div>
+</div>
+
+ <br />
+ <Footer></Footer>
     </div>
   )
 }
 
-export default Sharktankexpert;
-
+export default STexpert

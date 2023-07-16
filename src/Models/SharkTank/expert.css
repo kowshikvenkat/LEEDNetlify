@@ -1,0 +1,10 @@
+tr td:first-child {
+width:25%
+}
+tr td:nth-child(n) {
+   width:15%;
+      padding: 1%
+}
+th{
+   padding:1%
+}

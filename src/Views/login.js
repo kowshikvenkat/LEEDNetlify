@@ -1,21 +1,25 @@
 import React from 'react';
 import axios from 'axios';
 import './login.css';
+import LoadingScreen from 'react-loading-screen'
 import { app } from '../Models/firebase';
 import {OAuthProvider,getAuth,GoogleAuthProvider,signInWithPopup,signOut,deleteUser} from 'firebase/auth';
 import googlepic from "../Assets/google.png"
 import microsoftpic from "../Assets/microsoft.png" 
-import signoutpic from "../Assets/sign-out.png"
+import signoutpic from "../Assets/logout.png"
 import { Link ,useNavigate} from 'react-router-dom';
-import logo from '../Assets/logo2.png'
+import logo from '../Assets/logo.png'
 import { toast,ToastContainer } from "react-toastify";
+import loginImage from '../Assets/loginuserimg.png'
+import trophyImage from '../Assets/trophy.png'
 import 'react-toastify/dist/ReactToastify.css'
 var cryptojs = require("crypto-js")
 function Login() {
   let navigate = useNavigate()
-         const[signedIn,setsignedIn] = React.useState(false)
       const[ignored,forceUpdate] = React.useReducer(x=>x+1,0)
 const[blockedusers,setblockedusers] = React.useState([])
+  const[loading,setloading] = React.useState(false)
+  const[loadinglogoff,setloadinglogoff] = React.useState(false)
 React.useEffect(()=>{
       axios({
     method: "GET",
@@ -30,7 +34,7 @@ React.useEffect(()=>{
 
 },[])
 React.useEffect(()=>{
-  console.log(blockedusers)
+
 })
      const auth = getAuth(app)
       const provider = new GoogleAuthProvider()
@@ -51,19 +55,24 @@ axios.post("http://localhost:5000/createuser",{
   name:result.user.displayName,
   email:result.user.email,
   pic:result.user.photoURL,
+}).then((res)=>{
+let userid = cryptojs.AES.encrypt(res.data.id,'kowshik123').toString()
+sessionStorage.setItem('userid',JSON.stringify(userid))
 })
 
 navigate('/')
 }
 else if(blockedusers.includes(result.user.email)){
-  console.log("jijij")
           toast.error('Your account is Blocked !',{
             autoClose:5000,
             position:toast.POSITION.BOTTOM_CENTER
           })
 }
 }).catch((error)=>{
-console.log(error)
+   toast.error(error.message.split(/[()]/)[1]?.replace('auth/', ''),{
+            autoClose:5000,
+            position:toast.POSITION.BOTTOM_CENTER
+          })
 })
 }
  const microsoftProvider = new OAuthProvider('microsoft.com');
@@ -82,6 +91,8 @@ const signInWithMicrosoft=()=>{
     // IdP data available in result.additionalUserInfo.profile.
     
     // Get the OAuth access token and ID Token
+    if(!blockedusers.includes(result.user.email)){
+
     const credential = OAuthProvider.credentialFromResult(result);
 
     const accessToken = credential.accessToken;
@@ -92,6 +103,7 @@ sessionStorage.setItem('name',name)
 let email = cryptojs.AES.encrypt(result.user.email,'kowshik123').toString()  
 sessionStorage.setItem('email',email);
      const lookupMsAzureProfilePhoto = (accessToken) => {
+         setloading(true)
      fetch('https://graph.microsoft.com/v1.0/me/photo/$value', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -99,67 +111,99 @@ sessionStorage.setItem('email',email);
     }
     })
     .then(function(response) {
+    
       return response.blob();   
     })
     .then(function(blob) {
+     
       const reader = new FileReader()
       reader.readAsDataURL(blob)
-      reader.onload=()=>{
+      reader.onload=async()=>{
         const base64data = reader.result;
       let profilePic = cryptojs.AES.encrypt(base64data,'kowshik123').toString()
 sessionStorage.setItem('pic',JSON.stringify(profilePic))
-axios.post("http://localhost:5000/createuser",{
+
+await axios.post("http://localhost:5000/createuser",{
   name:result.user.displayName,
   email:result.user.email,
   pic:base64data,
+}).then((res)=>{
+let userid = cryptojs.AES.encrypt(res.data.id,'kowshik123').toString()
+sessionStorage.setItem('userid',JSON.stringify(userid))
 })
+setloading(false)
   navigate('/') 
-      }
-      
-      // const imageObjectURL = URL.createObjectURL(blob);
-      // imageObjectURL will be e.g. blob:http://localhost:3000/f123c12a-1234-4e30-4321-af32f2c5e5bc
-      // so updating the <img scr=""> will present the image correctly after
-      // setProfilePicUrl(imageObjectURL);
-      
+      }    
     })
     .catch(e => console.log('error injecting photo'));
 };   
-    lookupMsAzureProfilePhoto(accessToken)  
-  
+    lookupMsAzureProfilePhoto(accessToken)  }
+  else if(blockedusers.includes(result.user.email)){
+          toast.error('Your account is Blocked !',{
+            autoClose:5000,
+            position:toast.POSITION.BOTTOM_CENTER
+          })
+}
   })
   .catch((error) => {
     // Handle error.
-    console.log(error)
+     toast.error(error.message.split(/[()]/)[1]?.replace('auth/', ''),{
+            autoClose:5000,
+            position:toast.POSITION.BOTTOM_CENTER
+          })
   });
 
 }
 const SignOutMember =()=>{
+ setloadinglogoff(true)
   deleteUser(auth.currentUser).then(() => {
-  
+   
   // Sign-out successful.
 sessionStorage.removeItem('name');
 sessionStorage.removeItem('email');
 sessionStorage.removeItem('pic')
-
+setloadinglogoff(false)
 navigate('/')
 }).catch((error) => {
   // An error happened.
-  console.log(error)
+       toast.error(error.message.split(/[()]/)[1]?.replace('auth/', ''),{
+            autoClose:5000,
+            position:toast.POSITION.BOTTOM_CENTER
+          })
 });
 }
 
   return (
   <div className="login_container">
+   <LoadingScreen
+    loading={loading}
+    bgColor='#f1f1f1'
+    spinnerColor='#9ee5f8'
+    textColor='#676767'
+    text='Hang On logging In'
+  > 
+  </LoadingScreen>
+    <LoadingScreen
+    loading={loadinglogoff}
+    bgColor='#f1f1f1'
+    spinnerColor='#9ee5f8'
+    textColor='#676767'
+    text='Hang On logging Out'
+  > 
+  </LoadingScreen>
   <ToastContainer />
-    <div className="login">
+    <div className="login " style={{width:window.innerWidth>800?'30%':'90%'}}>
     <img style={{width:200,height:100,objectFit:'contain'}} src={logo}  alt="" />
-   <h4 className='text-light' style={{textShadow:'0 0 10px black'}}>LOGIN </h4> <br />
+ <div className="d-flex align-items-center w-100 justify-content-center p-2 " style={{background:'rgba(200,200,200,0.2)'}}> <img src={loginImage}  style={{width:20,height:20,objectFit:'contain',marginBottom:8}} alt="" />&nbsp; <h4 className=' ' style={{fontWeight:700,color:'#50d050'}}>LOGIN / SIGN UP</h4></div> <br />
      {(sessionStorage.getItem('name')==null||sessionStorage.getItem('name')==undefined) &&<button className='button' onClick={signInWithGoogle}> <span><img src={googlepic} alt="" /></span> <p className='bg-primary text-light'>Sign In With Google</p></button>}
  <br />
        {(sessionStorage.getItem('name')==null||sessionStorage.getItem('name')==undefined) &&<button className='button' onClick={signInWithMicrosoft}><span><img src={microsoftpic} alt="" /></span> <p className='bg-primary text-light'>Sign In With Microsoft</p></button>} <br />
-       {(sessionStorage.getItem('name')!==null&&sessionStorage.getItem('name')!==undefined) &&<button className='button' onClick={SignOutMember}><span><img id="signoutimg" src={signoutpic} alt="" /></span> <p className='bg-primary text-light'>Sign Out</p></button>} <br />
-       <p className='text-light'><u>Your Data Is Secured</u></p>
-       <p className='text-light'><u>Your Data Will Not Be Shared</u></p>
+       {(sessionStorage.getItem('name')!==null&&sessionStorage.getItem('name')!==undefined) &&<button className='button' onClick={SignOutMember}><span><img style={{height:30,width:30}} src={signoutpic} alt="" /></span> <p className='bg-primary text-light'>Sign Out</p></button>} <br />
+  <div className='StartJourney text-light'><h4>Start Your Journey <br /> With Us ! <img src={trophyImage} style={{height:20,width:20,marginBottom:5}} alt="" />
+  
+  </h4>
+  <div className='text-muted copyrights_footer' style={{fontSize:12}} >2023 &#169; KCT LEED . All Right Reserved</div>
+  </div>
         
     </div>
 

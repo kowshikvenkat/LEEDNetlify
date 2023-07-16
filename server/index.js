@@ -55,6 +55,7 @@ const Userschema = new mongoose.Schema({
   name:String,
   email:String,
  pic:String,
+ linkedIn:String,
  saved:[]
 })
 const User = mongoose.model('pendingpitches',Loginschema)
@@ -71,11 +72,13 @@ app.post('/createuser',(req,res)=>{
   }
   User3.find({email:user.email},function(err,docs){
           if(docs.length==0){
- User3.insertMany(user).then(()=>console.log("Added to users")).catch((err)=>console.log(err))
+ User3.insertMany(user).then((result)=>{console.log("Added to users");res.send({id:result[0]["_id"]})}).catch((err)=>console.log(err))
           }
+          else{
           console.log('useralready exists')
+        res.send({id:docs[0]["_id"]})  
+        }
   })
-  
 })
 
 app.post('/addpendingrequest',(req,res)=>{
@@ -121,157 +124,10 @@ res.send({pendingdata:user})
 
 })
  
-// res.send({pendingdata:user})
+
 })
 })
 
-
-
-app.post("/requestaccept",(req,res)=>{
- User.countDocuments({_id:req.body.id},function(err,docs){
- if(docs>0){
-  
-  if(req.body.admin=="admin1"){
-    User.findOneAndUpdate({_id:req.body.id},{admin1:true}).then(()=>console.log("updated")).catch((err)=>console.log(err))
-    User.find({_id:req.body.id},function(err,docs){
-   if(docs[0]['admin2']==true){
-   var user={
-    _id:docs[0]['_id'],
-    email:docs[0]['email'],
-    desc:docs[0]['desc'],
-    title:docs[0]['title'],
-    createdAt:docs[0]['createdAt'],
-    upvotes:{
-  count:0,
-  ids:[]
-},
-comments:[]
-   }
-    User2.insertMany(user).then(()=>console.log("Added to verifiedpitches")).catch((err)=>console.log(err))
-      User.findOneAndDelete({_id:req.body.id},function(err,docs){
-        console.log("deleted from pending requests")
-      })
-    }
-
-
-    })
-  }
-    if(req.body.admin=="admin2"){
-        User.findOneAndUpdate({_id:req.body.id},{admin2:true}).then((res)=>console.log("updated"))
-      User.find({_id:req.body.id},function(err,docs){
-    
-   if(docs[0]['admin1']==true){
-   var user={
-    _id:docs[0]['_id'],
-    email:docs[0]['email'],
-    desc:docs[0]['desc'],
-    title:docs[0]['title'],
-    createdAt:docs[0]['createdAt'],
-        upvotes:{
-  count:0,
-  ids:[]
-},
-comments:[]
-   }
-    User2.insertMany(user).then(()=>console.log("Added to verifiedpitches")).catch((err)=>console.log(err))
-      User.findOneAndDelete({_id:req.body.id},function(err,docs){
-        console.log("deleted from pending requests")
-      })
-    }
-
-    })
-      }
-  }
- })
- 
-  
-})
-app.post("/requestreject",(req,res)=>{
-      User.findOneAndDelete({_id:req.body.id},function(err,docs){
-        console.log("deleted from pending requests")
-      })
-})
-app.get("/verifiedpitches",(req,res)=>{
-  let user=[] 
-  User2.find({},function(err,docs){
-
-     docs.map((val,index)=>{
-        let cmtuser=[]
-  User3.find({email:docs[index]['email']},function(err,userdocs){
-    if(val['comments'].length>0){
-     
-    docs[index]['comments'].map((cmtval,cmtindex)=>{
-    User3.find({email:cmtval['commentedemail']},function(err,commentdocs){
-var commentuser={
-commntedname:commentdocs[0].name,
-commentedpic:commentdocs[0].pic,
-commenttext:cmtval['comment']
-}
-cmtuser.push(commentuser)
-if(docs[index]['comments'].length==cmtindex+1){
-    let newuser=
-  {
-    name:userdocs[0].name,
-    pic:userdocs[0].pic,
-    title:docs[index]['title'],
-    desc:docs[index]['desc'],
-    createdAt:docs[index]['createdAt'],
-    _id:docs[index]['_id'],
-    count:docs[index]['upvotes']['count'],
-    ids:docs[index]['upvotes']['ids'],
-     comments:cmtuser
-    
-  }
-  if(user.length==0){
-   user.push(newuser) 
-  }
-if(user.length>0){
- 
-// for(let i=0;i<user.length;i++)
-// if( user[i]['_id']!=newuser['_id']){
-//   user.push(newuser)
-// console.log(user.length)
-// }
-const duplicatevalue = user.filter(ele=>ele==newuser)
-if(duplicatevalue.length==0)
-  user.push(newuser)
-}
-
-if(user.length==docs.length)
-{
-   res.send({verifieddata:user})
-}
-}
-       })   
-  })
-}else{
-   let newuser=
-  {
-    name:userdocs[0].name,
-    pic:userdocs[0].pic,
-    title:docs[index]['title'],
-    desc:docs[index]['desc'],
-    createdAt:docs[index]['createdAt'],
-    _id:docs[index]['_id'],
-    count:docs[index]['upvotes']['count'],
-    ids:docs[index]['upvotes']['ids'],
-       comments:[]
-    
-  }
-        if(user.length==0){
-   user.push(newuser) 
-  }
-if(user.length>0&& user[0]['_id']!=newuser['_id']){
-
-  user.push(newuser)}
-
-
-if(user.length==docs.length)
-   res.send({verifieddata:user})}
-})
-})
-  })
-})
 app.post('/updatecommentverifiedpitch',(req,res)=>{
 User2.update({_id:req.body.peerid},{
  $push:{ comments:{commentedemail:req.body.expertid,comment:req.body.updatecomment}}
@@ -316,18 +172,7 @@ if(value==req.body.savedid){
    }
   })
 })
-app.post("/getuser",(req,res)=>{
-User3.find({email:req.body.email},function(err,docs){
-console.log(docs)
-  res.send({user:docs})
-})
-})
-app.post("/getuser",(req,res)=>{
-  req.body.saved.map((value,index)=>{
-User2.find({_id:value},)
-  })
 
-})
 const RegisterSchema = new mongoose.Schema({
  Institution:String,
        Email:String,
@@ -435,7 +280,6 @@ LEEDEVENTobj.quotes = req.body.quotes
    LEEDEVENTobj.pdf = req.body.pdf
      LEEDEVENTobj.video = req.body.video
 
-console.log(req.body.pic.length)
    EventModel.create(LEEDEVENTobj).then(console.log("Added to pendingLEEDevents"))
 })
 
@@ -462,10 +306,10 @@ EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending L
  VerifiedEventModel.insertMany(docs).then(console.log("added to verified KCTLEED events"))
 })
 })
-app.post("/rejectKCTLEEDevents",(req,res)=>{
-  EventModel.findOne({_id:req.body.id},function(err,docs){
+app.post("/rejectKCTLEEDevents",async(req,res)=>{
+  await EventModel.findOne({_id:req.body.id},function(err,docs){
      docs['video'].map((val,ind)=>{ 
-      const result = cloudinary.uploader.destroy(val['public_id'])
+      const result = cloudinary.uploader.destroy(val['public_id'],{resource_type:'video'})
       console.log(result)
     })
     docs['pic'].map((val,ind)=>{ 
@@ -474,7 +318,7 @@ app.post("/rejectKCTLEEDevents",(req,res)=>{
     })
   })
  
-       EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending LEED evsnts"))
+       EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending LEED events"))
 })
 app.get("/getverifiedLEEDevents",(req,res)=>{
   VerifiedEventModel.find({},function(err,docs){
@@ -489,7 +333,6 @@ BlockedUsers:[String]
 const PendingBlockModel = mongoose.model('pendingblockuser',BlockSchema)
 const BlockModel = mongoose.model('verifiedblockedusers',BlockSchema)
 app.post("/requestblockuser",(req,res)=>{
-  console.log("hhihiobjhdsfjvdsjcvdskjbdskvcbdsk")
   let obj = {
     admin:req.body.email,
     Useremail:req.body.UserEmail
@@ -514,4 +357,348 @@ app.get("/getverifiedblockedusers",(req,res)=>{
     BlockModel.find({},function(err,docs){
     res.send({docs:docs})
   })
+})
+
+
+//SHARKTANK-------->
+const STPitch = new mongoose.Schema({
+  userid:
+  
+  {type:String,
+    unique:true,
+  },
+title:String,
+content:String,
+users:String,
+impact:String,
+barriers:String,
+video:[],
+image:[],
+gdrive:[],
+upvotes:[],
+admin1:Boolean,
+admin2:Boolean,
+comment:{
+  
+  expert1:
+  {type:String,
+  unique:true
+  },expert2: {type:String,
+  unique:true
+  },expert3: {type:String,
+  unique:true
+  }},
+category:String,
+  createdAt: {
+    type: Date,
+    default: Date.now // Set the default value to the current date
+  },
+report:{
+  type:Array,
+  unique:true
+}
+})
+STPitch.index({report:1,userid:1,'comment.expert1':1,'comment.expert2':1,'comment.expert3':1})
+const PitchST = mongoose.model('sharktankpitches',STPitch)
+const pendingpitchST = mongoose.model('sharktankpendingpitches',STPitch)
+app.post("/addpitchST",(req,res)=>{
+let user={
+  userid:req.body.userid,
+  title:req.body.title,
+  content:req.body.content,
+  users:req.body.users,
+  barriers:req.body.barriers,
+  impact:req.body.impact,
+  video:req.body.video,
+  image:req.body.image,
+  gdrive:req.body.gdrive,
+  upvotes:[],
+  category:req.body.category,
+  comment:{expert1:"",expert2:"",expert3:""},
+  admin1:false,
+  admin2:false,
+}
+pendingpitchST.insertMany(user).then(()=>console.log("Added to pending pitchs"))
+})
+app.get("/pendingpitchST",async (req, res) => {
+  try {
+    const docs = await pendingpitchST.find({}).lean().exec();
+
+    for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.pic = docs2.pic;
+    }
+    res.send({docs:docs});
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error to send pitches ST");
+  }
+})
+app.post("/requestacceptST",(req,res)=>{
+pendingpitchST.findOne({_id:req.body.id},function(error,docs1){
+  if(docs1&&req.body.admin=="admin1"){
+  pendingpitchST.findOneAndUpdate({_id:req.body.id},{admin1:true},function(err,docs){
+ if(docs.admin2==true){
+  PitchST.insertMany(docs).then(()=>console.log("Added to SharkTank pitchs"))
+  pendingpitchST.findOneAndRemove({_id:req.body.id}).then(()=>console.log("Removed from SharkTank pending pitchs"))
+ }
+  })
+}
+else if(docs1&&req.body.admin=="admin2"){
+  pendingpitchST.findOneAndUpdate({_id:req.body.id},{admin2:true},function(err,docs){
+ if(docs.admin1==true){
+  PitchST.insertMany(docs).then(()=>console.log("Added to SharkTank pitchs"))
+    pendingpitchST.findOneAndRemove({_id:req.body.id}).then(()=>console.log("Removed from SharkTank pending pitchs"))
+ }
+  })
+}
+})
+})
+app.post("/requestrejectST", async (req, res) => {
+  try {
+
+    const document = await pendingpitchST.findOne({ _id: req.body.id }).exec();
+
+    if (document) {
+           document['video'].map((val,ind)=>{ 
+      const result = cloudinary.uploader.destroy(val['public_id'] ,{resource_type:'video'})
+      console.log(result)
+
+        
+    })
+     
+  document['image'].map((val,ind)=>{ 
+      const result = cloudinary.uploader.destroy(val['public_id'])
+      console.log(result)
+    })
+      await pendingpitchST.deleteOne({ _id: req.body.id }).exec();
+      console.log("Removed from SharkTank pending pitches");
+      res.status(200).json({ message: "Document removed successfully" });
+    } else {
+      res.status(404).json({ error: "Document not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+app.post("/expertpitchesST", async (req, res) => {
+  try {
+      let expert=req.body.email=="kowshik.20ei@kct.ac.in"?0: req.body.email == "jeevankumar.20ei@kct.ac.in" ? 1 : 2
+    const docs = await PitchST.find({report:{$not: { $elemMatch: {expert: expert}}}}).lean().exec();
+
+    for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+      val.email = docs2.email
+    }console.log(req.body.email)
+    res.send({docs:docs});
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error to send pitches ST");
+  }
+});
+app.get("/pitchesST", async (req, res) => {
+  try {
+    const docs = await PitchST.find({}).lean().exec();
+
+    for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+    res.send({docs:docs});
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error to send pitches ST");
+  }
+});
+
+app.post("/addreportST",(req,res)=>{
+let user={
+  expert:req.body.expertemail=="kowshik.20ei@kct.ac.in"?0: req.body.expertemail == "jeevankumar.20ei@kct.ac.in" ? 1 : 2,
+  one:req.body.one,
+  two:req.body.two,
+  three:req.body.three,
+  four:req.body.four,
+  five:req.body.five,
+  six:req.body.six,
+  seven:req.body.seven,
+  eight:req.body.eight,
+  nine:req.body.nine,
+  ten:req.body.ten,
+}
+PitchST.findOneAndUpdate(
+  { _id: req.body.pitchid },
+  {
+    $set: {
+      "report.$[elem].one": user.one,
+      "report.$[elem].two": user.two,
+      "report.$[elem].three": user.three,
+      "report.$[elem].four": user.four,
+      "report.$[elem].five": user.five,
+      "report.$[elem].six": user.six,
+      "report.$[elem].seven": user.seven,
+      "report.$[elem].eight": user.eight,
+      "report.$[elem].nine": user.nine,
+      "report.$[elem].ten": user.ten
+    }
+  },
+  {
+    arrayFilters: [{ "elem.expert": user.expert }],
+    new: true
+  },
+  function(err, doc) {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error updating report");
+    } else if (!doc) {
+      console.log("Document not found");
+      res.status(404).send("Document not found");
+    } else if (doc.report.length === 0||doc.report[doc.report.length-1]['expert']!==user.expert) {
+      // If the report array is empty, push a new object
+      doc.report.push(user);
+      doc.save(function(err) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log("New report object added successfully");
+        }
+      });
+    } else {
+      console.log("Report updated successfully");
+    }
+  }
+);
+})
+app.post("/likepitchST", (req, res) => {
+  PitchST.findOne({_id: req.body.pitchid}).then((pitch) => {
+    if (pitch.upvotes.includes(req.body.id)) {
+    PitchST.findOneAndUpdate(
+        {_id: req.body.pitchid},
+        {$pull: {upvotes: req.body.id}}
+      ).then(() => {
+        console.log("UnLiked the pitch");
+      });
+    } else {
+      PitchST.findOneAndUpdate(
+        {_id: req.body.pitchid},
+        {$push: {upvotes: req.body.id}}
+      ).then(() => {
+        console.log("Liked the pitch");
+      });
+    }
+  });
+});
+
+app.post("/addcommentST",(req ,res)=>{
+  const updateField = req.body.expertemail === "kowshik.20ei@kct.ac.in" ? "comment.expert1" : req.body.expertemail === "jeevankumar.20ei@kct.ac.in" ?"comment.expert2":"comment.expert3"
+PitchST.findOneAndUpdate({_id:req.body.pitchid},{ $set: {
+      [updateField]: req.body.comment 
+    }}).then(()=>console.log("Commented the pitch"))
+  
+})
+app.post("/savepitchST",(req,res)=>{
+  
+  User3.findOne({_id:req.body.id}).then((pitch)=>{
+if(pitch.saved.includes(req.body.pitchid)){
+  User3.findOneAndUpdate({_id:req.body.id},{$pull:{saved:req.body.pitchid}}).then(()=>console.log("Unsaved the pitch"))
+}
+else{
+    User3.findOneAndUpdate({_id:req.body.id},{$push:{saved:req.body.pitchid}}).then(()=>console.log("Saved the pitch"))
+}
+  })
+})
+
+app.post("/yourpitchST",async (req,res)=>{
+
+  
+
+
+  const results = await PitchST.find({userid:req.body.id}).lean().exec();
+       for (let i = 0; i < results.length; i++) {
+      const val = results[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+  
+      res.send({docs:results}); // Sending the results back as response
+  
+
+})
+app.post("/addLinkedInST",(req,res)=>{
+  User3.findOneAndUpdate({_id:req.body.id}, { linkedIn: req.body.linkedin }).then(()=>console.log("Added LinkedIn"))
+})
+app.post("/SavedPitchST",(req, res) => {
+ User3.findOne({_id: req.body.id},async function(err,docs){
+  
+    const savedIds = docs.saved; // Array of saved pitch IDs
+
+  const results = await PitchST.find({_id: { $in: savedIds }}).lean().exec();
+       for (let i = 0; i < results.length; i++) {
+      const val = results[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+      res.send({docs:results,savedId:savedIds}); // Sending the results back as response
+  
+  })
+});
+app.post("/commentSTexpert",async(req,res)=>{
+if(req.body.email=="kowshik.20ei@kct.ac.in"){
+ const docs = await PitchST.find({ $expr: { $gt: [{ $strLenCP: "$comment.expert1" }, 0] }}).lean().exec()
+    for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+        res.send({docs:docs});
+}
+else if(req.body.email=="jeevankumar.20ei@kct.ac.in"){
+   const docs = await PitchST.find({ $expr: { $gt: [{ $strLenCP: "$comment.expert2" }, 0] }}).lean().exec()
+    for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+        res.send({docs:docs});
+}
+else if(req.body.email=="harihaaran.20ei@kct.ac.in"){
+ const docs = await PitchST.find({ $expr: { $gt: [{ $strLenCP: "$comment.expert3" }, 0] }}).lean().exec()
+    for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+        res.send({docs:docs});
+}
+})
+app.post("/reportsexpertST",async (req,res)=>{
+  let expert=req.body.email=="kowshik.20ei@kct.ac.in"?0: req.body.email == "jeevankumar.20ei@kct.ac.in" ? 1 : 2
+
+const docs =await PitchST.find(  {report: { $elemMatch: {expert: expert}}}).lean().exec();
+  for (let i = 0; i < docs.length; i++) {
+      const val = docs[i];
+      const docs2 = await User3.findOne({ _id: val.userid }).lean().exec();
+      val.name = docs2.name;
+      val.linkedin = docs2.linkedIn;
+           val.email = docs2.email
+    }
+    res.send({docs:docs})
 })

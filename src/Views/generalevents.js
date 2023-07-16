@@ -6,22 +6,14 @@ import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
 import "react-big-calendar/lib/css/react-big-calendar.css"
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css"
 import EventTable from '../Models/eventTable';
 function GeneralEvents() {
-    const[verifiedevents,setverifiedevents] = React.useState([])
+    // const[verifiedevents,setverifiedevents] = React.useState([])
+    const verifiedevents =  useSelector((state)=>state.generalevents.value)
     const[events,setevents] = React.useState([])
-     React.useEffect(()=>{
-    
-axios({
-    method: "GET",
-    url: "http://localhost:5000/verifiedevents",
-  
-  }).then(res=>{
-setverifiedevents(res.data.docs)
-console.log(res.data.docs)
-  })
-  },[])
+
   React.useEffect(()=>{
   })
 const locales = {
@@ -81,19 +73,47 @@ function dayPropGetter(date) {
   };
 }
 
+  const CustomToolbar = toolbar => {
+    const goToPrevious = () => {
+      toolbar.onNavigate('PREV');
+    };
+
+    const goToNext = () => {
+      toolbar.onNavigate('NEXT');
+    };
+
+    const goToToday = () => {
+      toolbar.onNavigate('TODAY');
+    };
+
+    return (
+      <div className="rbc-toolbar">
+        <span className="rbc-btn-group">
+          <button className='text-success border border-success' onClick={goToPrevious}>Previous</button>
+          <button className='text-success border border-success' onClick={goToToday}>Today</button>
+          <button className='text-success border border-success' onClick={goToNext}>Next</button>
+        </span>
+              <span className="rbc-toolbar-label text-success" style={{fontSize:30,fontWeight:700}}>{toolbar.label}</span>
+        <span className="rbc-btn-group">
+          <button className='text-success border border-success' onClick={() => toolbar.onView('month')}>Month</button>
+          <button className='text-success border border-success' onClick={() => toolbar.onView('week')}>Week</button>
+          <button className='text-success border border-success' onClick={() => toolbar.onView('day')}>Day</button>
+        </span>
+      </div>
+    );
+  };
 
 const eventRenderer = ({ event }) => {
   return (
-<a href={event.link} target='_blank' style={{textDecoration:'none',color:'inherit'}}>
+<a href={event.link} target='_blank' rel="noreferrer" style={{textDecoration:'none',color:'inherit'}}>
       <div>
     <div className="d-flex justify-content-start align-items-center" style={{fontFamily:'Nunito Sans'}}>    <strong>{event.title}</strong><>,{event.institution}</></div>
-  
         <div style={{color:'black', fontSize: "14px",textAlign:'left' }}>{event.desc}</div>
 
     </div>
 </a>
-  );
-};
+  )
+}
   return (
 <>
 
@@ -105,7 +125,8 @@ events={events}
  style={{height:700,width:window.innerWidth>500?"90vw":"100vw",borderRadius:'20px',overflow:'hidden',padding:window.innerWidth>500?'2%':'0%',backgroundColor:'white',boxShadow:'0 0 15px #c0c0c0',fontFamily:'Oswald',marginTop:'2%'}}
    eventPropGetter={eventPropGetter}
        dayPropGetter={dayPropGetter}
-             components={{ event: eventRenderer }}
+             components={{ event: eventRenderer , toolbar: CustomToolbar,}}
+             showAllEvents={true}
  />:<EventTable val={verifiedevents}/>}
 </>
   )

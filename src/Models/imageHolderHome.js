@@ -42,8 +42,8 @@ function ImageHolderHome() {
         visibleSlides={window.innerWidth>700?2:1}
       >
         <Slider>
-          <Slide className='slide '  index={0}>
-       <LazyLoad height={200} offset={100} once>
+          <Slide   index={0}>
+       <LazyLoad className='slide' height={200} offset={100} once>
            <div class="card w-100">
   <img class="card-img-top" loading='lazy' style={{height:'20vh',objectFit:'cover',objectPosition:'50% 30%'}} src={cardimage1} alt="Card img" />
   <div class="card-body">
@@ -54,8 +54,8 @@ function ImageHolderHome() {
 </div>
        </LazyLoad>
           </Slide>
-          <Slide className='slide ' index={1}>
-            <LazyLoad height={200} offset={100} once>
+          <Slide  index={1}>
+            <LazyLoad className='slide' height={200} offset={100} once>
                <div class="card w-100 ">
   <img class="card-img-top" loading='lazy'  style={{height:'20vh',objectFit:'cover'}} src={cardimage2} alt="Card img" />
   <div class="card-body">
@@ -66,8 +66,8 @@ function ImageHolderHome() {
 </div>
             </LazyLoad>
           </Slide>
-          <Slide className='slide ' index={2}> 
-          <LazyLoad height={200} offset={100} once>
+          <Slide  index={2}> 
+          <LazyLoad className='slide' height={200} offset={100} once>
             <div class="card w-100 ">
   <img class="card-img-top" loading='lazy'  style={{height:'20vh',objectFit:'cover'}} src={cardimage3} alt="Card img" />
   <div class="card-body">
@@ -78,8 +78,8 @@ function ImageHolderHome() {
 </div>
           </LazyLoad>
           </Slide>
- <Slide className='slide' index={2}> 
- <LazyLoad height={200} offset={100} once>
+ <Slide index={3}> 
+ <LazyLoad className='slide' height={200} offset={100} once>
   <div  class="card w-100">
   <img class="card-img-top" loading='lazy'  style={{height:'20vh',objectFit:'cover',objectPosition:'50% 30%'}} src={cardimage4} alt="Card img" />
   <div class="card-body">
@@ -91,8 +91,8 @@ function ImageHolderHome() {
  </LazyLoad></Slide>
         </Slider>
         <br />
-        <ButtonBack className='card_button'><img src={backbutton} style={{width:'40px',height:'20px',marginBottom:10,objectFit:'cover',filter:"invert(100%)"}} alt="" /> </ButtonBack> &nbsp;&nbsp;
-        <ButtonNext className='card_button'><img src={backbutton} style={{width:'40px',height:'20px',marginBottom:10,objectFit:'cover',filter:"invert(100%)",transform:"rotate(180deg)"}} alt="" /></ButtonNext>
+        <ButtonBack className='btn btn-warning' ><img src={backbutton} style={{width:'40px',height:'20px',objectFit:'cover',filter:"invert(100%)"}} alt="" /> </ButtonBack> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+        <ButtonNext className='btn btn-warning'><img src={backbutton} style={{width:'40px',height:'20px',objectFit:'cover',filter:"invert(100%)",transform:"rotate(180deg)"}} alt="" /></ButtonNext>
       </CarouselProvider>
   
 </div>

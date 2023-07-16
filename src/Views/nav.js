@@ -19,7 +19,7 @@ const [userProfilePic,setUserProfilePic] = React.useState("")
 
   React.useEffect(()=>{
   //decrypting  
-  if(sessionStorage.getItem('name')!==null&&sessionStorage.getItem('name')!==undefined){
+  if(sessionStorage.getItem('name')!==null&&sessionStorage.getItem('email')!==undefined&&sessionStorage.getItem('pic')!==null){
  
 var bytes = cryptojs.AES.decrypt(sessionStorage.getItem('name'),'kowshik123')
 setuserName(()=> bytes.toString(cryptojs.enc.Utf8))
@@ -59,20 +59,20 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
         </Link>:<Link to="/login">Login</Link>} </li>
   
     </ul> */}
-<Navbar style={{backgroundColor:'#4CBB17',boxShadow:'0 0 20px grey'}} expand="md">
+<Navbar style={{backgroundColor:'rgba(38, 194, 129, 1)',boxShadow:'0 0 20px grey'}} expand="md">
       <Container fluid>
         <Navbar.Brand className='logo' style={{width:'20%',height:'70px'}} href="#home"><img src={logopic} style={{width:"100%",height:"100%",backgroundColor:'white',margin:0,objectFit:'contain'}} alt="" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto d-flex justify-content-around w-100">
-            <Nav.Link className='navitems' style={{color:'white'}}> <Link style={{color:'white',textDecoration:'none'}} to="/" >HOME</Link></Nav.Link>
-            <Nav.Link className='navitems' style={{color:'white',textDecoration:'none'}}>     ABOUT US</Nav.Link>
-             <Nav.Link className='navitems'>       <Link style={{color:'white',textDecoration:'none'}} to='/events'>EVENTS</Link></Nav.Link>
-              <Nav.Link className='navitems' style={{color:'white',textDecoration:'none'}}>      CONTACT</Nav.Link>
+            <Nav.Link  className='navitemscontainer'> <Link className='navitems' to="/" >HOME</Link></Nav.Link>
+            <Nav.Link  className='navitemscontainer'>     <Link className='navitems'>ABOUT US</Link></Nav.Link>
+             <Nav.Link className='navitemscontainer'>       <Link className='navitems' to='/events'>EVENTS</Link></Nav.Link>
+              <Nav.Link  className='navitemscontainer'>     <Link className='navitems'>  CONTACT</Link></Nav.Link>
                
-               <Nav.Link className='navitems'>           <Link style={{color:'white',textDecoration:'none'}} to="/sharktank" >SHARKTANK</Link> </Nav.Link>
+               <Nav.Link className='navitemscontainer'>           <Link className='navitems' to={(Email=="kowshik.20ei@kct.ac.in"||Email=="jeevankumar.20ei@kct.ac.in"||Email=="harihaaran.20ei@kct.ac.in")?"/sharktankexpert":Email.length>0? "/sharktank":"/login" }>SHARKTANK</Link> </Nav.Link>
                 
-          <Nav.Link className={userName.length==0&&'navitems'}>           <li >{userName.length>0?
+          <Nav.Link className={!userName.length>0&& 'navitemscontainer'}>           <li >{userName.length>0?
                    <NavDropdown style={{marginRight:40,marginTop:-10}} title={<i style={{color:'white',textDecoration:'underline'}}>{userName}</i>} id="basic-nav-dropdown">
            
               <NavDropdown.Item  href="#action/3.2">
@@ -81,11 +81,11 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
      <NavDropdown.Item href="#action/3.1">  </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
-               <div className="d-flex"><img src={signoutpic}className='my-1' width="20" height="20" alt="" /> <Link className='mx-1 ' to="/login" >SIGN OUT</Link></div>
+               <div className="d-flex"><img src={signoutpic}className='my-1' width="20" height="20" alt="" /> <Link  className='mx-1 ' to="/login" >SIGN OUT</Link></div>
               </NavDropdown.Item>
             </NavDropdown>
        
-       :<Link  style={{color:'white',textDecoration:'none'}} to="/login">LOGIN</Link>} </li></Nav.Link>
+       :<Link className='navitems'   to="/login">LOGIN</Link>} </li></Nav.Link>
           </Nav>
         </Navbar.Collapse>
    </Container>

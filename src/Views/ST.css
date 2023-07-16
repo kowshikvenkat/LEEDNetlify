@@ -1,0 +1,60 @@
+.MainST{
+    min-height: calc(100vh - 190px);
+ 
+}
+*{
+    font-family: 'Inter';
+
+}
+.bannerST{
+    padding: 1%;
+    background: linear-gradient(to right, rgba(0,0,0,0.6), grey, grey,rgba(0,0,0,0.1),rgba(255, 255, 255, 0.35)), url(../Assets/smart-good-looking-creative-young-brunette-girl-giving-advice-pointing-upper-left-corner-suggest-promo-smiling-pleased-approve-some-product-standing-white-background.jpg);
+background-position:85%;
+            background-repeat: no-repeat;
+            background-size: contain;
+height: fit-content;
+font-size: 25px;
+}
+@media (max-width: 900px) {
+    .bannerST{
+        background:linear-gradient(to right, rgba(0, 0, 0, 0.6), grey, grey, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.35));
+    }
+}
+
+#SThead{
+    background-image: url(../Assets/business-concept-with-team-close-up.jpg);
+    background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        padding: 2%;
+      justify-content: center;
+}
+.sidebar div{
+background-color: rgba(38, 194, 129, 1);
+transition: 0.2s ease-in;
+}
+.sidebar div:hover{
+    background: rgb(34, 162, 109);
+}
+.pitchscroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+.pitchscroll::-webkit-scrollbar-track {
+    background-color: grey;
+}
+
+.pitchscroll::-webkit-scrollbar-thumb {
+    background: rgba(38, 194, 129, 1);
+    border-radius:25px;
+}
+.savedbox{
+    transition: 0.2s ease;
+    box-shadow: 0 0 2px  skyblue;
+    background-color: white;
+}
+.savedbox:hover{
+cursor: pointer;
+box-shadow: 0 0 5px rgba(3, 201, 169, 0.5)
+}

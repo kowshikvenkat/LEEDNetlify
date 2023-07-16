@@ -179,7 +179,7 @@ email:Email,
       )}
 </div>
                        </div> <br /><br />
-                <input type="submit"  className='btn btn-primary w-25' style={{fontSize:30,boxShadow:'0 0 5px grey'}} value="Add Event" />
+                <input type="submit"  className='btn btn-primary w-25' style={{fontSize:20,boxShadow:'0 0 5px grey'}} value="Add Event" />
       </form>
     </div>
   )

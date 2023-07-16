@@ -1,27 +1,16 @@
 import React from 'react'
-
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import './home.css'
 import { useNavigate } from 'react-router-dom';
 import shareimage from '../Assets/share.png'
-import KCTImage from '../Assets/Kctimage.jpeg'
-import backbutton from '../Assets/arrow-left.png'
-import google from '../Assets/google.png'
-import logo1 from '../Assets/logo.png'
-import logo2 from '../Assets/logo2.png'
-import goalpic from '../Assets/goal.png'
-import menupic from '../Assets/menu.png'
-import scholarpic from '../Assets/scholar.png'
-import openbookpic from '../Assets/open-book.png'
+import LazyLoad from 'react-lazyload';
 import cardimage1 from '../Assets/5363874.jpg'
-import cardimage2 from '../Assets/brands-people-ZdqSuxl3Lak-unsplash.jpg'
 import cardimage3 from '../Assets/business-concept-with-team-close-up.jpg'
 import cardimage4 from '../Assets/cardimage1.jpg'
 import eventimage1 from '../Assets/eventimagehome.jpg'
 import eventimage2 from '../Assets/eventimagehome3.jpg'
 import eventimage3 from '../Assets/eventimagehome2.jpg'
-import TextTransition, { presets } from 'react-text-transition';
 import Button from 'react-bootstrap/Button';
 import bgvideo from '../Assets/home_bg.mp4'
 import Form from 'react-bootstrap/Form';
@@ -34,6 +23,7 @@ import Footer from '../Models/footer';
 function Home() {
   const navigate = useNavigate()
   const[soicalmediaicon,setsocialmediaicon] = React.useState(0)
+  const [Email,setEmail] = React.useState("")
  let box = React.createRef("")
   React.useEffect(()=>{
     console.log(box.current.getBoundingClientRect().top)
@@ -42,7 +32,12 @@ function Home() {
   setsocialmediaicon(1)}
   else{
    setsocialmediaicon(0)}
+   
   })
+  React.useEffect(()=>{
+if(sessionStorage.getItem('userid')!=null||sessionStorage.getItem('userid')!=undefined)
+setEmail(sessionStorage.getItem('email'))
+  },[])
   return (
     <div >
     <div className='d-flex flex-column align-items-center justify-content-center' style={{position:'fixed',bottom:'10%',width:80,height:250,right:'0%',opacity:soicalmediaicon,transition:'0.2s ease',zIndex:1000,backgroundColor:'white',margin:0,borderTopLeftRadius:'10px',borderBottomLeftRadius:'10px',boxShadow:'0 0 10px grey',border:'01px solid grey'}}>
@@ -63,8 +58,11 @@ function Home() {
     <br />
 <ImageHolderHome />
 <div ref={box} className="w-100 h-100 d-flex flex-column align-items-center" style={{position:'relative',border:'none'}} >
-<video src={bgvideo} style={{width:'100%',height:'100%',background:'red',objectFit:'cover',position:'absolute',top:0,right:0,zIndex:-1}} autoplay="true" muted loop />
-  <div className='home_sharktank ' onClick={()=>navigate("/sharktank")}>
+<LazyLoad once>
+  <video src={bgvideo} style={{width:'100%',height:'100%',background:'red',objectFit:'cover',position:'absolute',top:0,right:0,zIndex:-1}} autoplay="true" muted loop />
+</LazyLoad>
+<div className='home_sharktank' onClick={() => navigate((Email === "kowshik.20ei@kct.ac.in" || Email === "jeevankumar.20ei@kct.ac.in" || Email === "harihaaran.20ei@kct.ac.in") ? "/sharktankexpert" : (Email.length > 0 ? "/sharktank" : "/login"))}>
+
  
   <br /><br />
     <h2 style={{ zIndex:2,  fontFamily: 'roboto'}}>SharkTank</h2>
@@ -142,19 +140,19 @@ function Home() {
 <h2 className='text-warning w-50 ' style={{textShadow:'1px 1px 1px gray'}}>Yearly <br /> Achievements <br /><p className='text-muted' style={{fontSize:15,textShadow:'0 0 1px white'}}>(2018-2023)</p> <img src={cardimage3} style={{width:'80%',height:'50%',objectFit:'cover',margin:0,boxShadow:'3px 3px 5px grey'}} alt="" /></h2>
 <span className="d-flex justify-content-around  w-100 " style={{flexWrap:'wrap',padding:'5%'}}>
   <div className='d-flex flex-column align-items-center justify-content-start' style={{fontFamily:'monospace'}}>
-  <div style={{borderRadius:'50%',cursor:'pointer',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 15 </h1></div>
+  <div style={{borderRadius:'50%',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 15 </h1></div>
     <h3 className='text-succes'>Business<br />Meetings</h3>
 </div>
 <div className='d-flex flex-column align-items-center justify-content-start' style={{fontFamily:'monospace'}}>
-  <div style={{borderRadius:'50%',cursor:'pointer',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 150 </h1></div>
+  <div style={{borderRadius:'50%',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 150 </h1></div>
     <h3 className='text-succes'>Passed Out<br />Students</h3>
 </div>
 <div className='d-flex flex-column align-items-center justify-content-start text-center' style={{fontFamily:'monospace'}}>
-  <div style={{borderRadius:'50%',cursor:'pointer',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 7</h1></div>
+  <div style={{borderRadius:'50%',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 7</h1></div>
     <h3 className='text-succes'>Patent<br />Submission</h3>
 </div>
 <div className='d-flex flex-column align-items-center justify-content-start' style={{fontFamily:'monospace'}}>
-  <div style={{borderRadius:'50%',cursor:'pointer',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 5 </h1></div>
+  <div style={{borderRadius:'50%',boxShadow:'3px 3px 3px grey',width:'100px',height:'100px',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}><h1 > 5 </h1></div>
     <h3 className='text-succes'>Annual<br />Awards</h3>
 </div>
 </span>

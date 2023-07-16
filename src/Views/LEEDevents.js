@@ -6,35 +6,77 @@ import registericon from '../Assets/share.png'
 import LazyLoad from 'react-lazyload'
 import Modal from 'react-bootstrap/Modal'
 import helpdeskimage from '../Assets/user.png'
+import micpic from '../Assets/mic.png'
+import sharepic from '../Assets/share.png'
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
+import arrowupimg from '../Assets/arrow-up.png'
+import tickimage from '../Assets/check.png'
 function LEEDevents() {
-    const[verifiedLEEDevents,setverifiedLEEDevents] = React.useState([])
+    let location = useLocation()
+    const verifiedLEEDevents =  useSelector((state)=>state.LEEDevents.value)
+    const verifiedevents = [...verifiedLEEDevents];
+        const[filteredevents,setfilteredevents] = React.useState([])
     const[renderevents,setrenderevents] = React.useState("returnfutureevents")
     const[showHelp,setShowHelp] = React.useState(false)
+        const[copysharelink,setcopysharelink] = React.useState("")
  const [numPhotos, setNumPhotos] = React.useState(1);
  const[numcomevents,setNumcomevents] = React.useState(1);
  const[numfutevents,setNumfutevents] = React.useState(1)
+ const[queryid,setqueryid] = React.useState("")
     const s = new Date()
    React.useEffect(()=>{
-        axios.get("http://localhost:5000/getverifiedLEEDevents").then((res)=>{
-setverifiedLEEDevents(res.data.docs)
-console.log(res.data.docs)
-        })
-    },[])
+ 
+    if(verifiedevents.length>0){
+      const queryParams = new URLSearchParams(location.search);
+  // You can now access the query parameters using the "queryParams" object
+  setrenderevents("returnallevents")
+let id = queryParams.get('id')
+
+if(id){
+  setqueryid(id )
+let filtered = verifiedevents.filter(event => event["_id"] !== id).sort((a, b) => new Date(b.startdate) - new Date(a.startdate))
+verifiedevents.filter(event => event["_id"] == id).map((val,ind)=>{
+filtered.unshift(val)
+})
+setNumPhotos(numPhotos+2)
+setfilteredevents(filtered)
+
+}
+    }
+       
+    },[verifiedevents.length>0])
   const choosepicker = (msg)=>{
 setrenderevents(msg)
   }
   const helpdeskfunc=(msg)=>{
 setShowHelp(msg)
   }
-  const Renderdata=({value})=>{
-return <div style={{display:'block'}}  className='w-100'>
 
-         <h2   style={{fontSize:window.innerWidth<400&&15}}>{value['title']}</h2>
-        <p style={{margin:window.innerWidth<400?'0':20,fontSize:window.innerWidth<400?14:24}} className='text-warning'><em>`{value['quotes']}`</em></p>
-       <div className="w-100">
+  const Renderdata=({value})=>{
+return <div style={{display:'flex',flexDirection:'column'}}  className='w-100'>
+    <Helmet>
+        <meta property="og:title" content={value["title"]} />
+        <meta property="og:description" content={value['quotes']} />
+        <meta property="og:image" content={value['pic'][0]} />
+        <meta property="og:url" content={'http://localhost:3000/events?id=' + value['_id']} />
+      </Helmet>
+        <div id={value['_id']} style={{flexWrap:'wrap'}} className={window.innerWidth>500?'w-100 d-flex justify-content-between px-4 align-items-center':'w-100 d-flex justify-content-center align-items-center px-2'}> 
+        <h2></h2>
+        <h2   style={{fontSize:window.innerWidth<400&&20,fontWeight:500,textTransform:'capitalize',wordWrap:'break-word'}}>{value['title']}</h2>
+        <button style={{width:'fit-content',height:window.innerWidth>500?30:20,fontSize:window.innerWidth<400&&10,boxShadow:copysharelink==value["_id"]&&'0 0 5px grey'}} className={copysharelink==value["_id"]?'btn btn-light text-dark d-flex justify-content-center align-items-center':'btn btn-warning text-light d-flex justify-content-center align-items-center'} onClick={()=>{
+          const url  = `http://localhost:3000/events?id=${value['_id']}`
+          navigator.clipboard.writeText(url)
+          setcopysharelink(value["_id"])
+          }
+        }> <img src={copysharelink==value["_id"]?tickimage:sharepic} style={{width:'100%',objectFit:'contain',height:'100%'}} alt="" /> <p>&nbsp;</p> {copysharelink!=value["_id"]?'Share':'Copied'}</button>
+        </div> 
+        <p style={{margin:window.innerWidth<400?'0':20,fontSize:window.innerWidth<400?14:24,textShadow:'0 0 0.5px black'}} className='text-warning'><em>`{value['quotes']}`</em></p>
+       <div className="w-100 ">
          {value['video'].map((val,ind)=>
        <LazyLoad height={200} offset={100} once>
-         <video  src={val['secure_url']} style={{width:'80%',height:'80%',objectFit:'contain'}} controls></video>
+         <video  src={val['secure_url']} style={{width:'80%',height:'80%',}} controls></video>
        </LazyLoad>
         )}
        </div>
@@ -57,22 +99,22 @@ return <div style={{display:'block'}}  className='w-100'>
         </div>
 </div>
 </div>
-        <div className='w-100 justify-content-center d-flex align-items-center bg-info' style={{boxShadow:'1px 1px 6px grey'}}>
+        <div className='w-100 justify-content-center d-flex align-items-center  p-3' style={{boxShadow:'0 0 5px rgba(3, 201, 169, 0.5)',backgroundColor:'rgba(164,219,232,0.2)'}}>
            {value['info'].map((val,ind)=>
-        <div className='d-flex align-items-center '>
-           <div style={{fontSize:window.innerWidth>400?20:15,fontWeight:700,color:'white',fontFamily:'initial'}}>Check Out -</div>  <a style={{fontSize:20,fontWeight:700,fontFamily:'initial',textTransform:'uppercase',color:'red'}} href={val['link']} target='_blank'>&nbsp;{val['name']}</a>
+        <div className='d-flex align-items-center ' style={{flexWrap:'wrap'}}>
+           <div style={{fontSize:20,display:'flex ',alignItems:'center',flexWrap:'wrap'}}> <img src={micpic} style={{width:30,height:30}} alt="" /> Check Out </div>  <a style={{fontSize:20,fontWeight:700,textTransform:'uppercase',textUnderlineOffset:'3px'}} href={val['link']} target='_blank' rel="noreferrer"><img src={arrowupimg} style={{width:20,height:20,transform:'rotate(90deg)',marginLeft:15}} alt="" />&nbsp;{val['name']}</a>
         </div>
          )}
         </div>
         <br />
         <br />
-        <h3 style={{textDecoration:'underline'}}>Why to Join This Event</h3>
+        <h3 style={{textShadow:'0 0 1px rgba(3, 201, 169, 0.5) ',textDecoration:'underline',textUnderlineOffset:window.innerWidth>500? '8px':'3px'}}>Why to Join This Event ?</h3>
         <br />
-       <div  className="d-flex justify-content-around " style={{flexWrap:'wrap'}}>
+       <div  className="d-flex justify-content-around" style={{flexWrap:'wrap'}}>
           {value['benefits'].map((val,ind)=>
-         <div className='d-flex flex-column' style={{background:'white',borderRadius:'10px',padding:10,boxShadow:'0 0 5px grey',width:window.innerWidth>400?'200px':'100px'}}>
+         <div className='d-flex flex-column my-1' style={{background:'white',borderRadius:'10px',padding:10,boxShadow:'0 0 5px rgba(3, 201, 169, 0.5)',width:window.innerWidth>400?'200px':100}}>
            <h2 className='text-danger'>{ind+1}</h2><br />
-          <h6  style={{wordWrap: 'break-word',}}>{val}</h6>
+          <h6  style={{wordWrap: 'break-word'}}>{val}</h6>
          </div>
          )
          }
@@ -84,26 +126,31 @@ return <div style={{display:'block'}}  className='w-100'>
           return         <LazyLoad height={200} offset={100} once>
             <div >
             <embed src={val.replace("/view?usp=sharing","/preview")} style={{width:'70%'}} height="400">          
-          </embed> <br /><a style={{fontWeight:'600'}} href={val} target="_blank">DOWNLOAD PDF</a>
+          </embed> <br /><a rel="noreferrer" style={{fontWeight:'600'}} href={val} target="_blank">DOWNLOAD PDF</a>
           </div>
           </LazyLoad>
          })}                  
           <br/>
-                 <a  style={{fontSize:'120%',boxShadow:'0 0 10px grey'}} href={value['link']} className='btn btn-success' target="_blank">REGISTER <img src={registericon} style={{width:20,height:20,filter:'brightness(0) invert(1)'}} alt="" /></a> <br />
+                <div className="w-100 d-flex justify-content-center">
+                   <a rel="noreferrer"  style={{fontSize:window.innerWidth>500?'120%':'80%',boxShadow:'0 0 10px grey'}} href={value['link']} className='btn btn-success' target="_blank">REGISTER <img src={registericon} style={{width:20,height:20,filter:'brightness(0) invert(1)'}} alt=""  /></a> 
+                </div>
+                 <br />
                  <br />
                  <hr />
                  </div>
   }
     function ReturnAllEvents(){
-      return <div className='border-top bg-light d-flex flex-column justify-content-center w-100'>
+      return <div style={{scrollBehavior:'smooth'}} className='border-top bg-light d-flex flex-column justify-content-center w-100'>
 
       <h3 className='text-success' style={{fontSize:window.innerWidth<400?15:45,fontFamily:'Oswald'}}>All Events</h3>
       <hr />
-        {verifiedLEEDevents.sort((a, b) => new Date(b.startdate) - new Date(a.startdate)).slice(0,numPhotos).map((value,ind)=>{
+        {queryid.length==0? verifiedevents.sort((a, b) => new Date(b.startdate) - new Date(a.startdate)).slice(0,numPhotos).map((value,ind)=>{
+     return <Renderdata value={value}/>                     }
+    ):filteredevents.slice(0,numPhotos).map((value,ind)=>{
      return <Renderdata value={value}/>                     }
     )}
 <div className="d-flex justify-content-center w-100">
-  <button  className='btn btn-primary my-3 w-25' onClick={() => {setNumPhotos(numPhotos + 2)}}>Load more events</button>
+  <button  className='btn btn-primary my-3' onClick={() => {setNumPhotos(numPhotos + 2)}}>Load More Events</button>
 </div>
       </div>
     }
@@ -112,11 +159,11 @@ let a=0
       return <div className='border-top bg-light d-flex flex-column justify-content-center w-100'>
       <h3 className='text-success' style={{fontSize:window.innerWidth<400?15:45,fontFamily:'Oswald'}}>Today Events</h3>
          <hr />
-        {verifiedLEEDevents.map((value,ind)=>{
+        {verifiedevents.map((value,ind)=>{
           if(DateToDay(value['startdate'].slice(0,10))=="Today"){
 return  <Renderdata value={value}/>}  else{
                   a=a+1;
-                  if(ind+1==verifiedLEEDevents.length&& a==ind+1)
+                  if(ind+1==verifiedevents.length&& a==ind+1)
                   return <p className='text-danger' >NO LEED EVENTS TODAY</p>
                  }
     }
@@ -127,7 +174,7 @@ return  <Renderdata value={value}/>}  else{
 let a=0
       return <div className='border-top bg-light d-flex flex-column justify-content-center w-100'>
       <h3 className='text-success' style={{fontSize:window.innerWidth<400?15:45,fontFamily:'Oswald'}}>Future Events</h3>      <hr />
-        { verifiedLEEDevents.sort((a, b) => new Date(b.startdate) - new Date(a.startdate)).slice(0,numfutevents).map((value,ind)=>{
+        { verifiedevents.sort((a, b) => new Date(b.startdate) - new Date(a.startdate)).slice(0,numfutevents).map((value,ind)=>{
 if(value['startdate'].split("-")[0]>s.getFullYear() ||(value['startdate'].split("-")[0]==s.getFullYear()&&value['startdate'].split("-")[1]>s.getMonth()+1) || (value['startdate'].split("-")[0]==s.getFullYear()&&value['startdate'].split("-")[1]==s.getMonth()+1&&value['startdate'].split("-")[2].slice(0,2)>s.getDate())){
   
      return <Renderdata value={value}/>
@@ -136,7 +183,7 @@ if(value['startdate'].split("-")[0]>s.getFullYear() ||(value['startdate'].split(
      
                  else{
                   a=a+1;
-                  if(ind+1==verifiedLEEDevents.length&& a==ind+1)
+                  if(ind+1==verifiedevents.length&& a==ind+1)
                   return <p className='text-danger'>NO LEED EVENTS IN FUTURE</p>
                  }
                  }
@@ -144,7 +191,7 @@ if(value['startdate'].split("-")[0]>s.getFullYear() ||(value['startdate'].split(
     }
     
      <div className="d-flex justify-content-center w-100">
-  <button className='btn btn-primary my-3 w-25' onClick={() => setNumfutevents(numfutevents + 2)}>Load more events</button>
+  <button className='btn btn-primary my-3' onClick={() => setNumfutevents(numfutevents + 2)}>Load More Events</button>
 </div>
       </div>
 
@@ -154,13 +201,13 @@ if(value['startdate'].split("-")[0]>s.getFullYear() ||(value['startdate'].split(
 
       <h3 className='text-success' style={{fontSize:window.innerWidth<400?15:45,fontFamily:'Oswald'}}>Completed Events</h3>
             <hr />
-        {verifiedLEEDevents.sort((a, b) => new Date(b.startdate) - new Date(a.startdate)).slice(0,numcomevents).map((value,ind)=>{
+        {verifiedevents.sort((a, b) => new Date(b.startdate) - new Date(a.startdate)).slice(0,numcomevents).map((value,ind)=>{
 if(value['startdate'].split("-")[0]<s.getFullYear() ||(value['startdate'].split("-")[0]==s.getFullYear()&&value['startdate'].split("-")[1]<s.getMonth()+1) || (value['startdate'].split("-")[0]==s.getFullYear()&&value['startdate'].split("-")[1]==s.getMonth()+1&&value['startdate'].split("-")[2].slice(0,2)<s.getDate())){
    
      return <Renderdata value={value}/>}}
     )}
     <div className="d-flex justify-content-center w-100">
-  <button className='btn btn-primary my-3 w-25' onClick={() => setNumcomevents(numcomevents + 2)}>Load more events</button>
+  <button className='btn btn-primary my-3' onClick={() => setNumcomevents(numcomevents + 2)}>Load More Events</button>
 </div>
       </div>
     }

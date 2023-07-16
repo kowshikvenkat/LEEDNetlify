@@ -8,12 +8,11 @@ import DateToDay from '../Models/DateToDay';
 import { SidebarAdmin } from '../Models/sidebar';
 import './Requests.css'
 import Dashboard from './dashboard';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip ,PieChart, Pie,Legend,Cell} from 'recharts';
-import registericon from '../Assets/share.png'
 import adminpic from '../Assets/user.png'
 import Helpdesk from './helpdesk';
 import LEEDeventrequests from './LEEDeventrequests';
 import Createevents from './createevents';
+
 var cryptojs = require("crypto-js")
 
 function Requests() {
@@ -27,7 +26,6 @@ function Requests() {
   const[result,setresult] = React.useState({})
   const[accessToken,setaccessToken] = React.useState("")
   const [Email,setEmail] = React.useState("")
-     const[ignored,forceUpdate] = React.useReducer(x=>x+1,0)
           const[blockedrequests,setblockedrequests] = React.useState([])
      const[pendingregisters,setpendingregisters] = React.useState([])
                     const[LEEDevents,setLEEDevents] = React.useState([])
@@ -37,11 +35,17 @@ setrenderevents(msg)
   }
   React.useEffect(()=>{
    if(window.innerWidth>800){
-    if(sessionStorage.getItem('email')==null||sessionStorage.getItem('email')==undefined){
-     
+    if(sessionStorage.getItem('email')==undefined||sessionStorage.getItem('email')==null){ 
 VerifyAdmin()
-    
+}else if(sessionStorage.getItem('email')){
+  var bytesemail =  cryptojs.AES.decrypt(sessionStorage.getItem('email'),'kowshik123')
+  if(bytesemail.toString(cryptojs.enc.Utf8)!=="kowshik.20ei@kct.ac.in"&&bytesemail.toString(cryptojs.enc.Utf8)!=="jeevankumar.20ei@kct.ac.in"){
+    navigate("/")
+ }
+ 
 }
+   }else{
+    alert("Kindly switch to PC device(screenSize >800px) and Reload page ! ")
    }
   },[])
 
@@ -55,14 +59,13 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
 
 axios({
     method: "GET",
-    url: "http://localhost:5000/pendingdata",
+    url: "http://localhost:5000/pendingpitchST",
   
   }).then(res => {
-  res.data.pendingdata.map((value,index)=>{
-    if(res.data.pendingdata.length!==pendingdata.length){
+  res.data.docs.map((value,index)=>{
+    if(res.data.docs.length!==pendingdata.length){
     if(Email=="kowshik.20ei@kct.ac.in"){
     if(value['admin1']==false){
-  
   setpendingdata((prev)=>[...prev,value])
     }}
      else if(Email=="jeevankumar.20ei@kct.ac.in"){
@@ -81,7 +84,6 @@ axios({
     url: "http://localhost:5000/getpendingregisters",
   
   }).then(res=>{
-    console.log(res.data.docs)
     res.data.docs.map((val)=>{
 
 if(!val.admin){
@@ -137,7 +139,6 @@ microsoftProvider.setCustomParameters({
 function VerifyUIC(e){
   e.preventDefault()
  setopen(false)
- 
      if((result.user.email=="kowshik.20ei@kct.ac.in"&&UIC=="K2O0W0S2H0I7K2R6A0N")||(result.user.email=="jeevankumar.20ei@kct.ac.in"&&UIC=="H2A0R0I2H0A7A1R7A0N")){
           let name = cryptojs.AES.encrypt(result.user.displayName,'kowshik123').toString()
 sessionStorage.setItem('name',name)
@@ -156,10 +157,20 @@ sessionStorage.setItem('email',email);
     .then(function(blob) {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
-      reader.onload=()=>{
+      reader.onload=async()=>{
         const base64data = reader.result;
       let profilePic = cryptojs.AES.encrypt(base64data,'kowshik123').toString()
 sessionStorage.setItem('pic',JSON.stringify(profilePic))
+await axios.post("http://localhost:5000/createuser",{
+  name:result.user.displayName,
+  email:result.user.email,
+  pic:base64data,
+}).then((res)=>{
+let userid = cryptojs.AES.encrypt(res.data.id,'kowshik123').toString()
+sessionStorage.setItem('userid',JSON.stringify(userid))
+let verifyuic = cryptojs.AES.encrypt('verified','kowshik123').toString()
+sessionStorage.setItem('verifyuic',JSON.stringify(verifyuic))
+})
 window.location.reload()
       }
 
@@ -167,33 +178,33 @@ window.location.reload()
     .catch(e => console.log('error injecting photo'));
 };   
     lookupMsAzureProfilePhoto(accessToken)  
-fetchDataFromBackend()
+// fetchDataFromBackend()
     }
 else{
     navigate("/")
   }
      
 }
-  function fetchDataFromBackend(){
-axios({
-    method: "GET",
-    url: "http://localhost:5000/pendingdata",
+//   function fetchDataFromBackend(){
+// axios({
+//     method: "GET",
+//     url: "http://localhost:5000/pendingdata",
   
-  }).then(res => {
-  res.data.pendingdata.map((value,index)=>{
-    if(result.user.email=="kowshik.20ei@kct.ac.in"){
-    if(value['admin1']==false){
-    setpendingdata((prev)=>[...prev,value])
-    }}
-     else if(result.user.email=="jeevankumar.20ei@kct.ac.in"){
-    if(value['admin2']==false){
-  setpendingdata((prev)=>[...prev,value])
-    }}
-  })
+//   }).then(res => {
+//   res.data.pendingdata.map((value,index)=>{
+//     if(result.user.email=="kowshik.20ei@kct.ac.in"){
+//     if(value['admin1']==false){
+//     setpendingdata((prev)=>[...prev,value])
+//     }}
+//      else if(result.user.email=="jeevankumar.20ei@kct.ac.in"){
+//     if(value['admin2']==false){
+//   setpendingdata((prev)=>[...prev,value])
+//     }}
+//   })
 
-  });
+//   });
 
-  }
+//   }
 
   React.useEffect(()=>{
 addaxiosfunction()
@@ -231,28 +242,61 @@ addaxiosfunction()
           renderevents=="returnallevents"&&<Dashboard />
         }
     {renderevents=="returntodayevents"&&( pendingdata.length>0 ? pendingdata.map((value,index)=>
-      <div className='border w-100 mt-3'>
+      <div className='border d-flex flex-column align-items-center mt-3 p-2' style={{width:'95%'}}>
     
-   <div className="d-flex pitch_profile justify-content-center align-items-center">
+   <div className="d-flex w-100 pitch_profile justify-content-around align-items-center">
      <div className="d-flex justify-content-center align-items-end">
        <img src={value['pic']} style={{borderRadius:"50%",width:40,height:40}} alt="" />&nbsp;&nbsp;
         <i><h4 className='text-muted'>{value['name']}</h4></i>
      </div> &nbsp;&nbsp;
-     <div className=''>   <i className='text-muted '>{DateToDay(value['createdAt'])}</i></div>
+           <p>{value['category']}</p>
+            <p>{DateToDay(value['createdAt'].slice(0,10))}</p>
    </div>
         <h4>{value['title']}</h4> 
-   <p style={{fontFamily:"inherit"}}>    {value['desc']}</p>
-      <button onClick={()=>{
+   <p style={{fontFamily:"inherit"}}>    {value['content']}</p>
+   {value["users"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+<h3 className='text-secondary'>Target Users</h3>
+<p>{value['users']}</p>
+   </div>}
+     {value["impact"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+<h3 className='text-secondary'>Solution Impact</h3>
+<p>{value['impact']}</p>
+   </div>}
+     {value["barriers"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+<h3 className='text-secondary'>Adoption Barriers</h3>
+<p>{value['barriers']}</p>
+   </div>}
+       
+       {value['image'].map((val,ind)=>
+       <>
+        <img src={val['secure_url']} style={{width:'90%',height:400,objectFit:'contain'}} alt="" /> <br />
+       </>
+       )}
+       <br />
+       {value['video'].map((val,ind)=>
+       <>
+        <video src={val['secure_url'] } style={{width:'90%',maxHeight:'70vh',border:'1px solid black'}} controls></video> <br />
+       </>
+       )}
+  {value['gdrive'].length>0&& value['gdrive'].map((val,ind)=>{
+         
+          return         <div className='w-75'>
+            <embed src={val.replace("/view?usp=sharing","/preview")} style={{width:'100%'}} height="400">          
+          </embed> <br /> <a style={{fontWeight:'600'}} href={val} target="_blank">DOWNLOAD DOCUMENT</a> <br />
+          </div>
+         })}
+    <div className="w-100 d-flex justify-content-evenly my-3">
+        <button onClick={()=>{
 
 
               if(window.confirm("Confirm again to ACCEPT the pitch")){
                 if(Email=="kowshik.20ei@kct.ac.in"){
-           axios.post("http://localhost:5000/requestaccept",{
+           axios.post("http://localhost:5000/requestacceptST",{
   id:value['_id'],
   admin:"admin1"
 })
 }else if(Email=="jeevankumar.20ei@kct.ac.in"){
-   axios.post("http://localhost:5000/requestaccept",{
+   axios.post("http://localhost:5000/requestacceptST",{
   id:value['_id'],
   admin:"admin2"
 })
@@ -264,13 +308,14 @@ addaxiosfunction()
           <button onClick={()=>{
    
                 if(window.confirm("Confirm again to REJECT the pitch")){
-           axios.post("http://localhost:5000/requestreject",{
+           axios.post("http://localhost:5000/requestrejectST",{
   id:value['_id']
 })
        window.location.reload()
                 }
 
       }} className='btn btn-danger'>Reject</button>
+    </div>
       </div>
     ) :<h4><i>No Pending Sharktank Requests</i></h4>)}
      <div>

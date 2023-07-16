@@ -6,7 +6,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@300&family=Mukta:wght@300&display=swap');
 .slide{
 margin-left: 8vw;
-margin-right:8vw
+margin-right:8vw;
+
 }
 .imageHolder_Home{
     width:100vw;
@@ -186,7 +187,7 @@ footer span{
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
-    padding-right: 2%;
+    
 }
 .form_div_home form{
     width: 50%;

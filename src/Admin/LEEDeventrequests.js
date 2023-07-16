@@ -4,7 +4,7 @@ import DateToDay from '../Models/DateToDay'
 import registericon from '../Assets/share.png'
 function LEEDeventrequests({LEEDevents}) {
   return (
-    <div>
+    <div className=''>
          {LEEDevents.length>0?LEEDevents.map((value,index)=>
 {
 

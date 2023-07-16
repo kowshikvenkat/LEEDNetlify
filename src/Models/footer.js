@@ -9,12 +9,12 @@ function Footer() {
   return (
     <LazyLoad height={200} offset={100} once>
 <footer className='d-flex flex-column bg-light ' style={{boxShadow:'0 -5px 5px -5px grey',width:'99vw'}}>
-<span className=' ' style={{fontFamily:'Mukta'}}>
+<span className='w-100 ' style={{fontFamily:'Mukta'}}>
  <div style={{width:'100%'}}>
    <img src={logo1} style={{width:'40%',height:200,objectFit:'contain',}} alt="" />
  </div>
-  <div className='span_div_home w-100'>
-    <div className='text-dark text-start mx-5'>
+  <div className='span_div_home w-100 '>
+    <div className='text-dark text-start mx-3'>
     <br />
 <br />
       <h5 style={{fontWeight:'800'}}>PARTNERS</h5> 
@@ -32,7 +32,7 @@ function Footer() {
             <p>MAIL</p>
                   <p>MOBILE</p>
     </div>
-        <div className='text-dark  text-start mx-3'>
+        <div className='text-dark  text-start '>
     <br />
 <br />
       <h5 style={{fontWeight:'800'}}>CONNECT</h5> 
