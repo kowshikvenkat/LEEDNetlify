@@ -51,7 +51,7 @@ axios.post("http://localhost:5000/savepitchST",{
          <div className={window.innerWidth>500?'pitch bg-light my-3 p-1':'pitch bg-light my-3 '} style={{boxShadow:'0 0 10px grey',borderRadius:20,width:'95%'}}>
          <div style={{background:'rgba(200,200,200,0.5)',fontWeight:500,borderTopRightRadius:20,borderTopLeftRadius:20,letterSpacing:'2px'}} className={window.innerWidth>500?"d-flex justify-content-between p-4 align-items-center":"d-flex p-3 flex-column align-items-center"}>
            <div className={window.innerWidth>500?"d-flex w-25 justify-content-between align-items-center":"d-flex justify-content-between "}>  <div>{val['name']}</div>     {(val['linkedin'] &&val['linkedin'].length>0) && <a target='_blank' href={val['linkedin']}> <img src={linkedinimg} style={{width:20,height:20}} alt="" /> </a>}</div>
-           <div className={window.innerWidth>500?"d-flex w-25 justify-content-between align-items-center":"d-flex w-100 justify-content-between"}>
+           <div className={window.innerWidth>500?"d-flex w-50 justify-content-between align-items-center":"d-flex w-100 justify-content-between"}>
             <div>{val['category']}</div>
             <div>{DateToDay(val['createdAt'].slice(0,10))}</div>
            </div>
@@ -59,14 +59,14 @@ axios.post("http://localhost:5000/savepitchST",{
             <h5><b>{val['title']}</b></h5>
             <h6 className='p-2'>{val['content']}</h6>
               {val["users"].length>0 && <div className={window.innerWidth>500?'w-100 p-5':'w-100 text-center'} style={{textAlign:'start'}}>
-<h5 className='text-secondary'><u>Target Users</u></h5>
+<h5 className='text-secondary'>Target Users</h5>
 <p>{val['users']}</p>
    </div>}
-     {val["impact"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+     {val["impact"].length>0 && <div className={window.innerWidth>500?'w-100 p-5':'w-100 text-center'} style={{textAlign:'start'}}>
 <h5 className='text-secondary'>Solution Impact</h5>
 <p>{val['impact']}</p>
    </div>}
-     {val["barriers"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+     {val["barriers"].length>0 && <div className={window.innerWidth>500?'w-100 p-5':'w-100 text-center'} style={{textAlign:'start'}}>
 <h5 className='text-secondary'>Adoption Barriers</h5>
 <p>{val['barriers']}</p>
    </div>}

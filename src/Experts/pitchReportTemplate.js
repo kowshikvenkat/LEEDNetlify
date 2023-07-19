@@ -46,14 +46,14 @@ axios.post("http://localhost:5000/addcommentST",{
             <h5><b>{val['title']}</b></h5>
             <h6 className='p-2'>{val['content']}</h6>
                   {val["users"].length>0 && <div className={window.innerWidth>500?'w-100 p-5':'w-100 text-center'} style={{textAlign:'start'}}>
-<h5 className='text-secondary'><u>Target Users</u></h5>
+<h5 className='text-secondary'>Target Users</h5>
 <p>{val['users']}</p>
    </div>}
-     {val["impact"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+     {val["impact"].length>0 && <div className={window.innerWidth>500?'w-100 p-5':'w-100 text-center'} style={{textAlign:'start'}}>
 <h5 className='text-secondary'>Solution Impact</h5>
 <p>{val['impact']}</p>
    </div>}
-     {val["barriers"].length>0 && <div className='w-100 ' style={{textAlign:'start'}}>
+     {val["barriers"].length>0 && <div className={window.innerWidth>500?'w-100 p-5':'w-100 text-center'} style={{textAlign:'start'}}>
 <h5 className='text-secondary'>Adoption Barriers</h5>
 <p>{val['barriers']}</p>
    </div>}

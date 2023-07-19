@@ -16,6 +16,7 @@ function Pitches({expert}) {
       return state.expertpitch.value;
     }
   });
+  const sortedPitches = [...pitches];
     const[noofpitch,setnoofpitch] = React.useState(5)
     const[email,setEmail] = React.useState("")
     const[userid,setuserid] = React.useState("")
@@ -72,16 +73,18 @@ setuserid(()=>bytesuserid.toString(cryptojs.enc.Utf8))
      
   <div ref={containerRef} style={{height:'800px',overflowY:'scroll',width:'100%'}} className='pitchscroll d-flex flex-column align-items-center  '> 
        {pitches.length>0? !startSearch?
-      sortPitch=="Latest"?  pitches.sort((a, b) => moment(a.createdAt).diff(moment(b.createdAt))).reverse().map((val,ind)=>{
+      sortPitch=="Latest"?  sortedPitches.sort((a, b) => moment(a.createdAt).diff(moment(b.createdAt))).reverse().map((val,ind)=>{
 
 return <PitchTemplate val={val} userid={userid} expert={expert} email={email}/>
        } ):(sortPitch!="Latest"&&sortPitch.length>0)?(pitches.filter((val) => val.category.toLowerCase().includes(sortPitch.toLowerCase())).map((val,ind)=>{
 
 return <PitchTemplate val={val} userid={userid} expert={expert} email={email}/>
-       } )):pitches.slice(noofpitch-5,noofpitch).map((val,ind)=>{
-
-return <><PitchTemplate val={val} userid={userid} expert={expert}  email={email}/>
- {(sortPitch.length==0&&!startSearch)&& <button  onClick={()=>{
+       } )):
+       <>
+       {pitches.slice(noofpitch-5,noofpitch).map((val,ind)=>{
+return<PitchTemplate val={val} userid={userid} expert={expert}  email={email}/>
+       } )}
+        {(sortPitch.length==0&&!startSearch)&& <button  onClick={()=>{
 if(noofpitch>pitches.length)
 setnoofpitch(5)
 else
@@ -91,8 +94,7 @@ setnoofpitch(prev=>prev+5)
 }} className='btn btn-primary my-2 d-flex align-items-center'>
  <h4>N E X T <img src={backimage} style={{width:20,height:20,filter:'invert(100%)',transform:'rotate(90deg)'}} alt="" /> </h4>
 </button> }
-</> 
-       } ):      pitches.filter((val) => val.title.toLowerCase().includes(search.toLowerCase())).map((val,ind)=>{
+       </>:      pitches.filter((val) => val.title.toLowerCase().includes(search.toLowerCase())).map((val,ind)=>{
 
 return <PitchTemplate val={val} userid={userid } expert={expert} email={email} />
        } )
@@ -115,10 +117,16 @@ return <PitchTemplate val={val} userid={userid } expert={expert} email={email} /
       <div className={window.innerWidth>500?'d-flex align-items-center':'d-flex flex-column align-items-center'}>  <label htmlFor="">SORT </label>  {window.innerWidth>500&& <>&nbsp;</>}<select className='form-select' name="" onChange={(e)=>{setsortPitch(e.target.value);  containerRef.current.scrollTop = 0;}} id="">
         <option value=""></option>
           <option value="Latest">Latest</option>
-             <option value="Medical">Medical</option>
-    <option value="Agricultural">Agricultural</option>
-      <option value="Aerospace">Aerospace</option>
-        <option value="Curator">Curator</option>
+      <option value="Retail">Retail and Consumer Goods</option>
+    <option value="Finance">Financial Services</option>
+      <option value="IT">Technology and Information Technology (IT)</option>
+        <option value="Health">Healthcare and Pharmaceuticals</option>
+         <option value="Manufacture">Manufacturing and Industrial</option>
+          <option value="Energy">Energy and Utilities</option>
+           <option value="Tourism&Hospitality">Hospitality and Tourism</option>
+            <option value="Consultancy">Consultancies</option>
+             <option value="Transportation">Transportation and Logistics</option>
+              <option value="RealEstate">Real Estate and Construction</option>
         </select></div>
       </div>
 

@@ -2,6 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import DateToDay from '../Models/DateToDay'
 import registericon from '../Assets/share.png'
+import arrowupimg from '../Assets/arrow-up.png'
+import micpic from '../Assets/mic.png'
 function LEEDeventrequests({LEEDevents}) {
   return (
     <div className=''>
@@ -9,7 +11,7 @@ function LEEDeventrequests({LEEDevents}) {
 {
 
 
-  return     <div className='w-100 h-100' style={{fontFamily:'roboto',overflowY:'hidden'}}>
+  return     <div className='w-100 h-100 border border-dark' style={{fontFamily:'roboto',overflowY:'hidden'}}>
 
       <h2 style={{fontSize:window.innerWidth<400&&15}}>{value['title']}</h2>
         <p style={{margin:window.innerWidth<400?'0':20,fontSize:window.innerWidth<400?14:24}} className='text-warning'><em>`{value['quotes']}`</em></p>
@@ -19,12 +21,12 @@ function LEEDeventrequests({LEEDevents}) {
         )}
        </div>
 <div className="w-100 d-flex justify-content-center">
-  <div className={window.innerWidth>600?"d-flex w-75  my-5":"d-flex flex-column align-items-center w-100 my-5"} style={{backgroundColor:'rgba(164,219,232,0.2)',borderRadius:'40px'}}>
-  <div className='d-flex flex-column align-items-center justify-content-center'>
+  <div className="d-flex w-75  my-5" style={{backgroundColor:'rgba(164,219,232,0.2)',borderRadius:'40px'}}>
+  <div className='d-flex flex-column w-50 align-items-center justify-content-center'>
           {value['pic'].map((val,ind)=>
         <img src={val['secure_url']} alt="" style={{objectFit:'contain',width:'70%',height:'100%'}} />)}
 </div>
-        <div style={{paddingRight:'2%',paddingLeft:'2%'}} className='d-flex flex-column justify-content-center align-items-around'>
+        <div style={{paddingRight:'2%',paddingLeft:'2%'}} className='d-flex w-50 flex-column justify-content-center align-items-around'>
            <p>{value['desc']}</p>
          <div className='d-flex' style={{flexWrap:'wrap'}}>
           <h4 className='text-success '>When : </h4>
@@ -37,10 +39,10 @@ function LEEDeventrequests({LEEDevents}) {
         </div>
 </div>
 </div>
-        <div className='w-100 justify-content-center d-flex align-items-center bg-info' style={{boxShadow:'1px 1px 6px grey'}}>
+        <div className='w-100 justify-content-center d-flex align-items-center  p-3' style={{boxShadow:'0 0 5px rgba(3, 201, 169, 0.5)',backgroundColor:'rgba(164,219,232,0.2)'}}>
            {value['info'].map((val,ind)=>
-        <div className='d-flex align-items-center '>
-           <div style={{fontSize:window.innerWidth>400?20:15,fontWeight:700,color:'white',fontFamily:'initial'}}>Check Out -</div>  <a style={{fontSize:20,fontWeight:700,fontFamily:'initial',textTransform:'uppercase',color:'red'}} href={val['link']} target='_blank'>&nbsp;{val['name']}</a>
+        <div className='d-flex align-items-center ' style={{flexWrap:'wrap'}}>
+           <div style={{fontSize:20,display:'flex ',alignItems:'center',flexWrap:'wrap'}}> <img src={micpic} style={{width:30,height:30}} alt="" /> Check Out </div>  <a style={{fontSize:20,fontWeight:700,textTransform:'uppercase',textUnderlineOffset:'3px'}} href={val['link']} target='_blank' rel="noreferrer"><img src={arrowupimg} style={{width:20,height:20,transform:'rotate(90deg)',marginLeft:15}} alt="" />&nbsp;{val['name']}</a>
         </div>
          )}
         </div>

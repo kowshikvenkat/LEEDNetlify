@@ -3,3 +3,19 @@ td,th{
 width: 100%;
     border:1px solid black
 }
+.eventContainer{
+    overflow-x: auto;
+   overflow-y:auto;
+}
+.eventContainer::-webkit-scrollbar{
+    height:5px;
+  
+}
+.eventContainer::-webkit-scrollbar-track {
+    background-color: grey;
+}
+.eventContainer::-webkit-scrollbar-thumb {
+
+        background-color: white;
+    /* Change this value as needed */
+}

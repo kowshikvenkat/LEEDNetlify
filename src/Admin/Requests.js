@@ -342,10 +342,10 @@ addaxiosfunction()
 {pendingregisters.map((value,index)=>
 <div className='my-5 w-75 p-2' style={{boxShadow:'0 0 10px grey'}}>
   <h5>From <b>{value['Institution']}</b></h5>
-<p className='' style={{float:'left'}}>Person To Contact - <a target="_blank" href={`mailto:${value['Email']}`}>{value['Email']}</a></p><br /><br />
+<p className='' style={{float:'left'}}>Person To Contact - <a rel="noreferrer" target="_blank" href={`mailto:${value['Email']}`}>{value['Email']}</a></p><br /><br />
 <h5>{value['Title']}</h5>
 <p>{value['Desc']}</p>
-{value['Link']!=null&& <a href={value['Link']}>Registeration/Redirect Link</a>}
+{value['Link']!=null&& <a target="_blank" rel="noreferrer" href={value['Link']}>Registeration/Redirect Link</a>}
 <p><i>Date Of Event : {DateToDay(value['Date'].slice(0,10)) }&nbsp;{value['Date'].slice(11)}</i> -<i>{DateToDay(value['endDate'].slice(0,10)) }&nbsp;{value['endDate'].slice(11)}</i></p>
 <button className='btn btn-success  mx-5' onClick={()=>{
     if(window.confirm("Confirm again to ACCEPT the EVENT")){

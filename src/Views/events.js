@@ -52,7 +52,7 @@ function Events() {
 <p className={window.innerWidth>500?'text-primary  w-50 d-flex align-items-center mt-2':'text-primary mt-2 text-start p-1'}><img src={infopic} style={{height:30,width:30}} alt="" />Events from organizations are accepted .</p>
 <p className={window.innerWidth>500?'text-primary text-light w-50 d-flex align-items-center mt-2':'text-primary mt-2 text-start text-light p-1'} style={{background:'rgba(0,0,0,0.5)'}}><img src={infopic} style={{height:30,width:30}} alt="" />Events from individuals will not be entertained !</p>
 <img src={KCTImage} style={{height:'20%',width:'40%'}} alt="" />
-  <Link to="/eventregister" className='btn btn-primary my-3 w-75'>Register Your Event </Link> 
+  <Link to="/eventregister" className={window.innerWidth>500?'btn btn-primary my-3 w-25':'btn btn-primary my-3 w-75'}>Register Your Event </Link> 
 </div>
 <br /><br />
 </div>:  <LEEDevents />}

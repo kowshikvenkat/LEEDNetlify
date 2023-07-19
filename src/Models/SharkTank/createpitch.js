@@ -32,14 +32,14 @@ var bytesuserid = cryptojs.AES.decrypt(JSON.parse(sessionStorage.getItem('userid
 setuserid(()=>bytesuserid.toString(cryptojs.enc.Utf8))
 }
        },[])
-      React.useEffect(()=>{
-  console.log(image)
-      })
+    React.useEffect(()=>{
+      console.log(video)
+    })
     async function PitchSubmit(e){
         e.preventDefault()
             let videofile=[];
          let imagefile=[]
-        if(categ.length>5){
+        if(categ.length>0){
 
                   setdisableBTN(true)
         if(video.length>0){
@@ -47,7 +47,7 @@ setuserid(()=>bytesuserid.toString(cryptojs.enc.Utf8))
 
         const videoformdata = new FormData()
         for(let i=0;i<video.length;i++){  
-             if(video[i]!=undefined&&video[i]!=null){
+if(video[i]!=undefined&&video[i]!=null){
         videoformdata.append("file",video[i])
 videoformdata.append("upload_preset", "axjn5pob")
         videouploading.current=true
@@ -57,34 +57,33 @@ const res = await axios.post("https://api.cloudinary.com/v1_1/ds27l3mqz/auto/upl
   }
 })
 if(res){
-  videouploading.current=false
+
 videofile.push({secure_url:res.data.secure_url,public_id:res.data.public_id})
 }
-             }
+}         
   }
+    videouploading.current=false
         }
           if(image.length>0){
     
         const imageformdata = new FormData()
 for(let i=0;i<image.length;i++){
-if(image[i]!=undefined&&image[i]!=null){
+  if(image[i]!=undefined&&image[i]!=null){
         imageformdata.append("file",image[i])
-
 imageformdata.append("upload_preset", "axjn5pob")
-        imageuploading.current=true
-    
+        imageuploading.current=true 
 const res =await axios.post("https://api.cloudinary.com/v1_1/ds27l3mqz/auto/upload",imageformdata,{
   headers:{
     "Content-Type":'multipart/form-data'
   }
 })
 if(res){
-imageuploading.current=false
 imagefile.push({secure_url:res.data.secure_url,public_id:res.data.public_id})
 }
 }
 }
-        }
+imageuploading.current=false
+     }
 
 if(videouploading.current==false&&imageuploading.current==false){
 
@@ -150,7 +149,7 @@ window.location.reload()
         <option value="Health">Healthcare and Pharmaceuticals</option>
          <option value="Manufacture">Manufacturing and Industrial</option>
           <option value="Energy">Energy and Utilities</option>
-           <option value="Tourism">Hospitality and Tourism</option>
+           <option value="Tourism&Hospitality">Hospitality and Tourism</option>
             <option value="Consultancy">Consultancies</option>
              <option value="Transportation">Transportation and Logistics</option>
               <option value="RealEstate">Real Estate and Construction</option>
@@ -166,7 +165,6 @@ window.location.reload()
 <input id={`video${i}`} type="file" className='form-control'  accept="video/*" onChange={(e) => {
   const file = e.target.files[0];
   const fileSize = file.size / 1024 / 1024; // Convert file size to MB
-
   if (fileSize <= 100) {
     setvideo((prev) => {
       const updatedvideo = [...prev];
@@ -182,15 +180,14 @@ window.location.reload()
     e.target.value = null;
       setvideo((prev) => {
       const updatedvideo = [...prev];
-      updatedvideo.splice(i,1) 
+      updatedvideo[i] =undefined
       return updatedvideo;
     });
   }
 }}
  required={i>0} />
 <button type='button'  className='btn btn-danger'  style={{borderRadius:'50%'}} onClick={()=>{setaddvideo(prev=>prev-1);
-let value = document.getElementById(`video${addvideo-1}`).value;
-setvideo(prev=>prev.filter(item=>!value.includes(item.name)))
+setvideo(prev=>prev.slice(0,-1))
 }}>X</button>
 </div>
 {(videouploaderr!=undefined&&videouploaderr==i)&&<><br /><p className='text-danger'>File Size exceeds 100MB </p></>}
@@ -220,22 +217,20 @@ setvideo(prev=>prev.filter(item=>!value.includes(item.name)))
       });
       if(imguploaderr==i){
       setimguploaderr()
- 
       }
-      
     } else {
 setimguploaderr(i)
       e.target.value = null;
        setimage((prev) => {
         const updatedimage = [...prev];
-        updatedimage.splice(i,1)
+        updatedimage[i] =undefined
         return updatedimage;
       });
     }
   }} required={i>0}/>
 <button type='button'  className='btn btn-danger'  style={{borderRadius:'50%'}} onClick={()=>{setaddimage(prev=>prev-1);
-let value = document.getElementById(`image${addimage-1}`).value;
-setimage(prev=>prev.filter(item=>!value.includes(item.name)))
+
+setimage(prev=>prev.slice(0,-1))
 }}>X</button>
 
 </div>

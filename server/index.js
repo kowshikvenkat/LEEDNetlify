@@ -306,20 +306,31 @@ EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending L
  VerifiedEventModel.insertMany(docs).then(console.log("added to verified KCTLEED events"))
 })
 })
-app.post("/rejectKCTLEEDevents",async(req,res)=>{
-  await EventModel.findOne({_id:req.body.id},function(err,docs){
-     docs['video'].map((val,ind)=>{ 
-      const result = cloudinary.uploader.destroy(val['public_id'],{resource_type:'video'})
-      console.log(result)
-    })
-    docs['pic'].map((val,ind)=>{ 
-      const result = cloudinary.uploader.destroy(val['public_id'])
-      console.log(result)
-    })
-  })
- 
-       EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending LEED events"))
-})
+app.post("/rejectKCTLEEDevents", async (req, res) => {
+  try {
+    const docs = await EventModel.findOne({ _id: req.body.id });
+
+    // Loop through the 'video' array and delete cloudinary resources
+    await Promise.all(docs['video'].map(async (val, ind) => {
+      const result = await cloudinary.uploader.destroy(val['public_id'], { resource_type: 'video' });
+    }));
+
+    // Loop through the 'pic' array and delete cloudinary resources
+    await Promise.all(docs['pic'].map(async (val, ind) => {
+      const result = await cloudinary.uploader.destroy(val['public_id']);
+    }));
+
+    // Delete the document from the database
+    await EventModel.deleteOne({ _id: req.body.id });
+
+    console.log("Removed from pending LEED events");
+    res.sendStatus(200); // Send a success response to the client
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500); // Send an error response to the client
+  }
+});
+
 app.get("/getverifiedLEEDevents",(req,res)=>{
   VerifiedEventModel.find({},function(err,docs){
     res.send({docs:docs})
@@ -362,11 +373,7 @@ app.get("/getverifiedblockedusers",(req,res)=>{
 
 //SHARKTANK-------->
 const STPitch = new mongoose.Schema({
-  userid:
-  
-  {type:String,
-    unique:true,
-  },
+  userid:String,
 title:String,
 content:String,
 users:String,
@@ -378,27 +385,19 @@ gdrive:[],
 upvotes:[],
 admin1:Boolean,
 admin2:Boolean,
-comment:{
-  
-  expert1:
-  {type:String,
-  unique:true
-  },expert2: {type:String,
-  unique:true
-  },expert3: {type:String,
-  unique:true
-  }},
+comment: {
+    expert1: String,
+    expert2: String,
+    expert3: String,
+  },
 category:String,
   createdAt: {
     type: Date,
     default: Date.now // Set the default value to the current date
   },
-report:{
-  type:Array,
-  unique:true
-}
+report:[Object]
 })
-STPitch.index({report:1,userid:1,'comment.expert1':1,'comment.expert2':1,'comment.expert3':1})
+
 const PitchST = mongoose.model('sharktankpitches',STPitch)
 const pendingpitchST = mongoose.model('sharktankpendingpitches',STPitch)
 app.post("/addpitchST",(req,res)=>{

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Calendar, dayjsLocalizer, globalizeLocalizer, momentLocalizer,dateFnsLocalizer } from 'react-big-calendar'
+import '../Models/eventTable.css'
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
 import getDay from 'date-fns/getDay';
 import "react-big-calendar/lib/css/react-big-calendar.css"
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import "react-datepicker/dist/react-datepicker.css"
 import EventTable from '../Models/eventTable';
@@ -88,17 +88,18 @@ function dayPropGetter(date) {
 
     return (
       <div className="rbc-toolbar">
-        <span className="rbc-btn-group">
-          <button className='text-success border border-success' onClick={goToPrevious}>Previous</button>
-          <button className='text-success border border-success' onClick={goToToday}>Today</button>
-          <button className='text-success border border-success' onClick={goToNext}>Next</button>
-        </span>
-              <span className="rbc-toolbar-label text-success" style={{fontSize:30,fontWeight:700}}>{toolbar.label}</span>
-        <span className="rbc-btn-group">
+         <span className="rbc-btn-group">
           <button className='text-success border border-success' onClick={() => toolbar.onView('month')}>Month</button>
           <button className='text-success border border-success' onClick={() => toolbar.onView('week')}>Week</button>
           <button className='text-success border border-success' onClick={() => toolbar.onView('day')}>Day</button>
         </span>
+              <span className="rbc-toolbar-label text-success" style={{fontSize:30,fontWeight:700}}>{toolbar.label}</span>
+                <span className="rbc-btn-group">
+          <button className='text-success border border-success' onClick={goToPrevious}>Previous</button>
+          <button className='text-success border border-success' onClick={goToToday}>Today</button>
+          <button className='text-success border border-success' onClick={goToNext}>Next</button>
+        </span>
+     
       </div>
     );
   };
@@ -106,9 +107,9 @@ function dayPropGetter(date) {
 const eventRenderer = ({ event }) => {
   return (
 <a href={event.link} target='_blank' rel="noreferrer" style={{textDecoration:'none',color:'inherit'}}>
-      <div>
-    <div className="d-flex justify-content-start align-items-center" style={{fontFamily:'Nunito Sans'}}>    <strong>{event.title}</strong><>,{event.institution}</></div>
-        <div style={{color:'black', fontSize: "14px",textAlign:'left' }}>{event.desc}</div>
+      <div className='eventContainer'>
+    <div className="d-flex justify-content-start align-items-center" style={{fontFamily:'Nunito Sans'}}>    <strong>{event.title}</strong></div>
+        <div style={{color:'black',textShadow:'0 0 3px white', fontSize: "14px",textAlign:'left' }}><strong>{event.institution}</strong></div>
 
     </div>
 </a>

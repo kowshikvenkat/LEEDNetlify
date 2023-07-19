@@ -72,8 +72,8 @@ if(userid){
          <p >{userName}</p>
         <div style={{padding:5}}>    <Link style={{textDecoration:'none',color:'white'}} className='d-flex justify-content-evenly align-items-center' to="createpitchST">CREATE PITCH <img src={addpic} style={{width:30,height:30,background:'white',padding:5,borderRadius:'50%'}} alt="" /> </Link></div>
         <hr />
-       <div style={{padding:5,}} >    <Link className='d-flex justify-content-evenly align-items-center'  style={{textDecoration:'none',color:'white'}} to="savedST">SAVED PITCHES <img src={savepic}  style={{width:30,height:30,background:'white',padding:3,borderRadius:'50%'}} alt="" /> </Link></div> <hr />
-              <div style={{padding:5}}>    <Link className='d-flex justify-content-evenly align-items-center'  style={{textDecoration:'none',color:'white'}} to="yourpitchST">YOUR PITCHES <img src={yourpitchimg}  style={{width:30,height:30,background:'white',padding:3,borderRadius:'50%'}} alt="" /></Link></div>
+       <div style={{padding:5,}} >    <Link className='d-flex justify-content-evenly align-items-center'  style={{textDecoration:'none',color:'white'}} to="savedST">SAVED PITCH <img src={savepic}  style={{width:30,height:30,background:'white',padding:3,borderRadius:'50%'}} alt="" /> </Link></div> <hr />
+              <div style={{padding:5}}>    <Link className='d-flex justify-content-evenly align-items-center'  style={{textDecoration:'none',color:'white'}} to="yourpitchST">YOUR PITCH <img src={yourpitchimg}  style={{width:30,height:30,background:'white',padding:3,borderRadius:'50%'}} alt="" /></Link></div>
               </div>
                         
  
