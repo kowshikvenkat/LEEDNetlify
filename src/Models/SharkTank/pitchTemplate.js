@@ -24,7 +24,7 @@ if(!upvotes.includes(userid))
 setupvotes((prev)=>prev.concat(userid));
 else
 setupvotes((prev)=>prev.filter(item=>item!=userid))
-axios.post("http://localhost:5000/likepitchST",{
+axios.post("https://leednetlifybackend.onrender.com/likepitchST",{
     id:userid,
     pitchid:pitchid
 })
@@ -40,7 +40,7 @@ function savepitch(pitchid){
       dispatch(setsaved(updatedArray))
 
     }
-axios.post("http://localhost:5000/savepitchST",{
+axios.post("https://leednetlifybackend.onrender.com/savepitchST",{
     id:userid,
     pitchid:pitchid
 })

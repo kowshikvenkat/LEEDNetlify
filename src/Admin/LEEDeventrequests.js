@@ -75,7 +75,7 @@ function LEEDeventrequests({LEEDevents}) {
          
          let response = window.confirm( value['title']+", event taking place on "+ value['startdate'].slice(0,10)+" Time : "+  value['startdate'].slice(11)+"\n"+"Confirm again to reject event !")
          if(response){
- axios.post("http://localhost:5000/rejectKCTLEEDevents",{
+ axios.post("https://leednetlifybackend.onrender.com/rejectKCTLEEDevents",{
             id:value['_id']
           })
           window.location.reload()
@@ -85,7 +85,7 @@ function LEEDeventrequests({LEEDevents}) {
          
          let response = window.confirm( value['title']+", event taking place on "+ value['startdate'].slice(0,10)+" Time : "+  value['startdate'].slice(11)+"\n"+"Confirm again to accept event !")
          if(response){
- axios.post("http://localhost:5000/acceptKCTLEEDevents",{
+ axios.post("https://leednetlifybackend.onrender.com/acceptKCTLEEDevents",{
             id:value['_id']
           })
                  window.location.reload()

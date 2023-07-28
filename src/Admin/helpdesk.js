@@ -15,14 +15,14 @@ const[ytlink,setytlink] = React.useState()
  React.useEffect(()=>{
        axios({
     method: "GET",
-    url: "http://localhost:5000/getYTReferral",
+    url: "https://leednetlifybackend.onrender.com/getYTReferral",
   }).then((res)=>{
 setYTvideos(res.data.docs)
   })
   },[])
       function HostYoutube(e){
 if(YTvideos.length<4){
-  axios.post("http://localhost:5000/YTreferral",{
+  axios.post("https://leednetlifybackend.onrender.com/YTreferral",{
   ytlink:ytlink
 })
 }else{
@@ -60,7 +60,7 @@ opts={{
         />
         <button className='btn btn-danger' onClick={()=>{
             if(window.confirm("Confirm again to remove yt referral")){
-      axios.post("http://localhost:5000/removeytreferral",{
+      axios.post("https://leednetlifybackend.onrender.com/removeytreferral",{
 id:val["_id"]
           })
             }
@@ -120,7 +120,7 @@ id:val["_id"]
         <input type="submit" value="BLOCK" className='btn btn-danger' onClick={()=>{
                  if(window.confirm('Confirm Again To Block')){
             console.log("confirmed")
-             axios.post("http://localhost:5000/requestblockuser",{
+             axios.post("https://leednetlifybackend.onrender.com/requestblockuser",{
      email:Email,
      UserEmail:UserEmail
           }) }

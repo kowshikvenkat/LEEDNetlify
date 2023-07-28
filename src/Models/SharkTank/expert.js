@@ -19,7 +19,7 @@ function ExpertReportST({email,pitchid}) {
 function Submitted(e){
   e.preventDefault()
   setreportsubmitted(true)
-axios.post("http://localhost:5000/addreportST",{
+axios.post("https://leednetlifybackend.onrender.com/addreportST",{
   expertemail:email,
   pitchid:pitchid,
   one:problem,
@@ -37,7 +37,7 @@ axios.post("http://localhost:5000/addreportST",{
   function CommentSubmitted(e){
     e.preventDefault()
     setcommentsubmitted(true)
-axios.post("http://localhost:5000/addcommentST",{
+axios.post("https://leednetlifybackend.onrender.com/addcommentST",{
     expertemail:email,
       pitchid:pitchid,
       comment:comment

@@ -87,7 +87,7 @@ imageuploading.current=false
 
 if(videouploading.current==false&&imageuploading.current==false){
 
- axios.post("http://localhost:5000/addpitchST",{
+ axios.post("https://leednetlifybackend.onrender.com/addpitchST",{
     userid:userid,
     title:Title,
     content:content,

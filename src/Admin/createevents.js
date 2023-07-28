@@ -72,7 +72,7 @@ if(res){
 if(videouploading.current==false&&imageuploading.current==false){
 
   
-axios.post("http://localhost:5000/pendingLEEDevent",{
+axios.post("https://leednetlifybackend.onrender.com/pendingLEEDevent",{
 
 title:Title,
 desc:Desc,

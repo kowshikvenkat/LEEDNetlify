@@ -8,7 +8,7 @@ function LinkedinPopup({id}) {
     const[open,setopen] = React.useState(false)
     function AddLinkedIn(e){
         e.preventDefault();
-axios.post("http://localhost:5000/addLinkedInST",{
+axios.post("https://leednetlifybackend.onrender.com/addLinkedInST",{
     id:id,
     linkedin:LinkedIn
 })

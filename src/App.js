@@ -41,13 +41,13 @@ function App() {
     
 axios({
     method: "GET",
-    url: "http://localhost:5000/verifiedevents",
+    url: "https://leednetlifybackend.onrender.com/verifiedevents",
   
   }).then(res=>{
 dispatch(setGenEvents(res.data.docs))
   })
 
-      axios.get("http://localhost:5000/getverifiedLEEDevents").then((res)=>{
+      axios.get("https://leednetlifybackend.onrender.com/getverifiedLEEDevents").then((res)=>{
 dispatch(setLEEDEvents(res.data.docs))
 
 })
@@ -55,7 +55,7 @@ dispatch(setLEEDEvents(res.data.docs))
     React.useEffect(()=>{
    axios({
     method: "GET",
-    url: "http://localhost:5000/pitchesST",
+    url: "https://leednetlifybackend.onrender.com/pitchesST",
   }).then((res)=>{
 
 dispatch(setPitches(res.data.docs))

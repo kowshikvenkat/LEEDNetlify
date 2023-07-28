@@ -59,7 +59,7 @@ setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
 
 axios({
     method: "GET",
-    url: "http://localhost:5000/pendingpitchST",
+    url: "https://leednetlifybackend.onrender.com/pendingpitchST",
   
   }).then(res => {
   res.data.docs.map((value,index)=>{
@@ -81,7 +81,7 @@ axios({
    if(Email.length>0){
      axios({
     method: "GET",
-    url: "http://localhost:5000/getpendingregisters",
+    url: "https://leednetlifybackend.onrender.com/getpendingregisters",
   
   }).then(res=>{
     res.data.docs.map((val)=>{
@@ -98,7 +98,7 @@ setpendingregisters((prev) => (prev.includes(val) ? prev : [...prev, val]));
   })
     axios({
     method: "GET",
-    url: "http://localhost:5000/getpendingblockedusers",
+    url: "https://leednetlifybackend.onrender.com/getpendingblockedusers",
   
   }).then(res=>{
     res.data.docs.map((val,ind)=>{
@@ -161,7 +161,7 @@ sessionStorage.setItem('email',email);
         const base64data = reader.result;
       let profilePic = cryptojs.AES.encrypt(base64data,'kowshik123').toString()
 sessionStorage.setItem('pic',JSON.stringify(profilePic))
-await axios.post("http://localhost:5000/createuser",{
+await axios.post("https://leednetlifybackend.onrender.com/createuser",{
   name:result.user.displayName,
   email:result.user.email,
   pic:base64data,
@@ -188,7 +188,7 @@ else{
 //   function fetchDataFromBackend(){
 // axios({
 //     method: "GET",
-//     url: "http://localhost:5000/pendingdata",
+//     url: "https://leednetlifybackend.onrender.com/pendingdata",
   
 //   }).then(res => {
 //   res.data.pendingdata.map((value,index)=>{
@@ -212,7 +212,7 @@ addaxiosfunction()
   },[Email=="jeevankumar.20ei@kct.ac.in" ||Email=="kowshik.20ei@kct.ac.in"])
   function addaxiosfunction(){
 
-        axios.post("http://localhost:5000/getpendingKCTLEEDevents",{
+        axios.post("https://leednetlifybackend.onrender.com/getpendingKCTLEEDevents",{
       email:Email
     }).then((res)=>{
      res.data.docs.map((value,index)=>{
@@ -291,12 +291,12 @@ addaxiosfunction()
 
               if(window.confirm("Confirm again to ACCEPT the pitch")){
                 if(Email=="kowshik.20ei@kct.ac.in"){
-           axios.post("http://localhost:5000/requestacceptST",{
+           axios.post("https://leednetlifybackend.onrender.com/requestacceptST",{
   id:value['_id'],
   admin:"admin1"
 })
 }else if(Email=="jeevankumar.20ei@kct.ac.in"){
-   axios.post("http://localhost:5000/requestacceptST",{
+   axios.post("https://leednetlifybackend.onrender.com/requestacceptST",{
   id:value['_id'],
   admin:"admin2"
 })
@@ -308,7 +308,7 @@ addaxiosfunction()
           <button onClick={()=>{
    
                 if(window.confirm("Confirm again to REJECT the pitch")){
-           axios.post("http://localhost:5000/requestrejectST",{
+           axios.post("https://leednetlifybackend.onrender.com/requestrejectST",{
   id:value['_id']
 })
        window.location.reload()
@@ -329,7 +329,7 @@ addaxiosfunction()
     <h3>{value['Useremail']}</h3>
     <button className='btn btn-danger' onClick={()=>{
       if(window.confirm('Confirm Again to Block')){
-        axios.post("http://localhost:5000/acceptblockuser",{
+        axios.post("https://leednetlifybackend.onrender.com/acceptblockuser",{
           id:value['_id']
         })
         window.location.reload()
@@ -352,7 +352,7 @@ addaxiosfunction()
 <p><i>Date Of Event : {DateToDay(value['Date'].slice(0,10)) }&nbsp;{value['Date'].slice(11)}</i> -<i>{DateToDay(value['endDate'].slice(0,10)) }&nbsp;{value['endDate'].slice(11)}</i></p>
 <button className='btn btn-success  mx-5' onClick={()=>{
     if(window.confirm("Confirm again to ACCEPT the EVENT")){
-axios.post("http://localhost:5000/accepteventrequest",{
+axios.post("https://leednetlifybackend.onrender.com/accepteventrequest",{
 id:value['_id'],
 email:Email
 })
@@ -361,7 +361,7 @@ setpendingregisters(prevArray => prevArray.filter(obj => obj['_id'] !== value['_
 }}>Accept</button>
 <button className='btn btn-danger' onClick={()=>{
     if(window.confirm("Confirm again to REJECT the EVENT")){
-axios.post("http://localhost:5000/rejecteventrequest",{
+axios.post("https://leednetlifybackend.onrender.com/rejecteventrequest",{
 id:value['_id']
 
 })

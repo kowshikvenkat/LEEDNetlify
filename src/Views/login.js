@@ -23,7 +23,7 @@ const[blockedusers,setblockedusers] = React.useState([])
 React.useEffect(()=>{
       axios({
     method: "GET",
-    url: "http://localhost:5000/getverifiedblockedusers",
+    url: "https://leednetlifybackend.onrender.com/getverifiedblockedusers",
   
   }).then((res)=>{
     res.data.docs.map((value,index)=>{
@@ -51,7 +51,7 @@ sessionStorage.setItem('email',email);
 let profilePic = cryptojs.AES.encrypt(result.user.photoURL,'kowshik123').toString()
 sessionStorage.setItem('pic',JSON.stringify(profilePic))
 
-axios.post("http://localhost:5000/createuser",{
+axios.post("https://leednetlifybackend.onrender.com/createuser",{
   name:result.user.displayName,
   email:result.user.email,
   pic:result.user.photoURL,
@@ -123,7 +123,7 @@ sessionStorage.setItem('email',email);
       let profilePic = cryptojs.AES.encrypt(base64data,'kowshik123').toString()
 sessionStorage.setItem('pic',JSON.stringify(profilePic))
 
-await axios.post("http://localhost:5000/createuser",{
+await axios.post("https://leednetlifybackend.onrender.com/createuser",{
   name:result.user.displayName,
   email:result.user.email,
   pic:base64data,

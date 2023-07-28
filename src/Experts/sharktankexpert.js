@@ -39,16 +39,16 @@ React.useEffect(()=>{
 })
     React.useEffect(()=>{
       if(Email){
-       axios.post("http://localhost:5000/expertpitchesST",{
+       axios.post("https://leednetlifybackend.onrender.com/expertpitchesST",{
        email:Email
     }).then((res)=>{
 dispatch(setexpertPitches(res.data.docs))
 
    })
-     axios.post("http://localhost:5000/commentSTexpert",{
+     axios.post("https://leednetlifybackend.onrender.com/commentSTexpert",{
   email:Email
 }).then((res)=>dispatch(setexpertcomments(res.data.docs)))
-  axios.post("http://localhost:5000/reportsexpertST",{
+  axios.post("https://leednetlifybackend.onrender.com/reportsexpertST",{
   email:Email
 }).then((res)=>dispatch(setexpertreports(res.data.docs)))
   }

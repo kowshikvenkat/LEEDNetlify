@@ -19,7 +19,7 @@ if(!upvotes.includes(userid))
 setupvotes((prev)=>prev.concat(userid));
 else
 setupvotes((prev)=>prev.filter(item=>item!=userid))
-axios.post("http://localhost:5000/likepitchST",{
+axios.post("https://leednetlifybackend.onrender.com/likepitchST",{
     id:userid,
     pitchid:pitchid
 })
@@ -28,7 +28,7 @@ setdisablelike(false)
    function CommentSubmitted(pitchid ,e){
   e.preventDefault()
       setcommentsubmitted(true)
-axios.post("http://localhost:5000/addcommentST",{
+axios.post("https://leednetlifybackend.onrender.com/addcommentST",{
     expertemail:email,
       pitchid:pitchid,
       comment:comment

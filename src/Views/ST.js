@@ -41,7 +41,7 @@ React.useEffect(()=>{
 
 if(userid){
   
-   axios.post("http://localhost:5000/yourpitchST",{
+   axios.post("https://leednetlifybackend.onrender.com/yourpitchST",{
         id:userid
     }).then((res)=>dispatch(setyourpitch(res.data.docs)))
 }

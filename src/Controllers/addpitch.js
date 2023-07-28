@@ -4,7 +4,7 @@ function Addpitch(e, header,desc,profileEmail) {
 
    e.preventDefault()
       try{
-   axios.post("http://localhost:5000/addpendingrequest",{
+   axios.post("https://leednetlifybackend.onrender.com/addpendingrequest",{
  email:profileEmail,
   title :header,
   desc:desc,
@@ -20,7 +20,7 @@ return false
 export function AddComment(e,peerid,expertid,commentupdate){
       e.preventDefault()
      
-      axios.post("http://localhost:5000/updatecommentverifiedpitch",{
+      axios.post("https://leednetlifybackend.onrender.com/updatecommentverifiedpitch",{
 peerid:peerid,
 expertid:expertid,
 updatecomment:commentupdate

@@ -29,7 +29,7 @@ function ImageHolderHome() {
   React.useEffect(()=>{
        axios({
     method: "GET",
-    url: "http://localhost:5000/getYTReferral",
+    url: "https://leednetlifybackend.onrender.com/getYTReferral",
   }).then((res)=>{
     
 setYTvideos(res.data.docs)
