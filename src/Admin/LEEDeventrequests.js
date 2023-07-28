@@ -21,12 +21,12 @@ function LEEDeventrequests({LEEDevents}) {
         )}
        </div>
 <div className="w-100 d-flex justify-content-center">
-  <div className="d-flex w-75  my-5" style={{backgroundColor:'rgba(164,219,232,0.2)',borderRadius:'40px'}}>
-  <div className='d-flex flex-column w-50 align-items-center justify-content-center'>
+  <div className="d-flex flex-column w-75  my-5" style={{backgroundColor:'rgba(164,219,232,0.2)',borderRadius:'40px'}}>
+  <div className='d-flex flex-column align-items-center justify-content-center'>
           {value['pic'].map((val,ind)=>
-        <img src={val['secure_url']} alt="" style={{objectFit:'contain',width:'70%',height:'100%'}} />)}
+        <img src={val['secure_url']} alt="" style={{objectFit:'contain',width:'70%',height:'100%',maxHeight:'400px'}} />)}
 </div>
-        <div style={{paddingRight:'2%',paddingLeft:'2%'}} className='d-flex w-50 flex-column justify-content-center align-items-around'>
+        <div style={{paddingRight:'2%',paddingLeft:'2%'}} className='d-flex flex-column justify-content-center align-items-around'>
            <p>{value['desc']}</p>
          <div className='d-flex' style={{flexWrap:'wrap'}}>
           <h4 className='text-success '>When : </h4>
@@ -78,6 +78,7 @@ function LEEDeventrequests({LEEDevents}) {
  axios.post("http://localhost:5000/rejectKCTLEEDevents",{
             id:value['_id']
           })
+          window.location.reload()
          }
          }}>REJECT</button>
          <button className='btn btn-success' onClick={()=>{
@@ -87,12 +88,13 @@ function LEEDeventrequests({LEEDevents}) {
  axios.post("http://localhost:5000/acceptKCTLEEDevents",{
             id:value['_id']
           })
+                 window.location.reload()
          }
          }}>ACCEPT</button>
   
     </div>
 }
-    ):<h4><i>No KCT LEED Events Requests</i></h4>}
+    ):<h4><i>No LEED Event Requests</i></h4>}
     </div>
   )
 }

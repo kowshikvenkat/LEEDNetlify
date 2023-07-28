@@ -24,12 +24,13 @@ import STexpert from './Experts/sharktankexpert';
 import Pitches from './Models/SharkTank/pitches';
 import { useDispatch } from 'react-redux';
 import { setGenEvents ,setLEEDEvents} from './Controllers/redux';
+import { setPitches } from './Controllers/redux';
+import AboutUs from './Views/aboutus';
+import Contact from './Views/contact';
 const cryptojs = require("crypto-js")
 
 
 function App() {
-  const location = useLocation()
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   
    const[ignored,forceUpdate] = React.useReducer(x=>x+1,0)
@@ -51,6 +52,14 @@ dispatch(setLEEDEvents(res.data.docs))
 
 })
   },[])
+    React.useEffect(()=>{
+   axios({
+    method: "GET",
+    url: "http://localhost:5000/pitchesST",
+  }).then((res)=>{
+
+dispatch(setPitches(res.data.docs))
+  })  },[])
 
 
 React.useEffect(() => {
@@ -95,7 +104,7 @@ settimer((prev)=>prev+30)
     </div>:
      <div className='ContentApp' style={{    backgroundColor: 'rgba(237, 239, 236, 0.8)',width:'100%'}}>
       <NavInApp />
-  <div style={{marginTop:'70px',width:'100%'}}>
+  <div style={{marginTop:'60px',width:'100%'}}>
        <Routes>
     <Route exact path="/" element={  <Home />} />
 <Route exact path="/login" element={<Login />}/>
@@ -116,6 +125,8 @@ settimer((prev)=>prev+30)
 <Route exact path="/events" element={<Events />}></Route>
 <Route path="/allevents" element={<LEEDevents />} />
   <Route path="/eventregister" element={<Eventregister /> }/>
+    <Route path="/aboutus" element={<AboutUs /> }/>
+       <Route path="/contact" element={<Contact /> }/>
 </Routes>
   </div>
      </div>}

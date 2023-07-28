@@ -4,8 +4,10 @@ import axios from 'axios'
 import infopic from "../Assets/info.png"
 import backimage from '../Assets/sign-out.png'
 import KCTImage from '../Assets/KCTLOGO.png'
+const cryptojs = require("crypto-js")
 function Eventregister() {
   const navigate = useNavigate()
+  const[Account,setAccount] = React.useState("")
     const[Institution,setInstitution] = React.useState("")
     const[Email,setEmail] = React.useState("")
     const[Title,setTitle] = React.useState("")
@@ -14,7 +16,14 @@ function Eventregister() {
     const[startDate,setstartDate] = React.useState(null)
        const[endDate,setendDate] = React.useState(null)
          const [isMobile, setIsMobile] = React.useState(false);
+React.useEffect(()=>{
+  if(sessionStorage.getItem('email')!==null&&sessionStorage.getItem('email')!==undefined){
+var bytesemail =  cryptojs.AES.decrypt(sessionStorage.getItem('email'),'kowshik123')
+setAccount(()=>bytesemail.toString(cryptojs.enc.Utf8))
+setEmail(()=>bytesemail.toString(cryptojs.enc.Utf8))
+  }
 
+},[])
   // Function to set a cookie indicating the user's preference to view the desktop site
   function setDesktopViewCookie() {
     document.cookie = 'view=desktop';
@@ -23,6 +32,7 @@ function Eventregister() {
     function HandleSubmit(e){
         e.preventDefault()
     axios.post("http://localhost:5000/requestevent",{
+      Account:Account,
        Institution:Institution,
        Email:Email,
        Title:Title,
@@ -59,7 +69,7 @@ navigate("/events")
     <form className={window.innerWidth>500?'d-flex flex-column align-items-center w-75 border p-3':'d-flex flex-column align-items-center w-100 border p-3'} style={{boxShadow:'1px 1px 7px grey'}} action="" onSubmit={HandleSubmit}>
     <h3><u>APPLICATION</u></h3>
         Your Institution : <input className='form-control' style={{width:'100%',height:'40px'}}  type="text" onChange={(e)=>setInstitution(e.target.value)} required/> <br />
-        Your Contact Mail Id : <input className='form-control' style={{width:'100%',height:'40px'}} type="email" onChange={(e)=>setEmail(e.target.value)}  required/> <br />
+        Your Contact Mail Id : <input className='form-control' style={{width:'100%',height:'40px'}} type="email" value={Account} onChange={(e)=>setEmail(e.target.value)}  required/> <br />
         Your Event Title : <input className='form-control' style={{width:'100%',height:'40px'}} type="text" onChange={(e)=>setTitle(e.target.value)} required/> <br />
         Your Event Description : <textarea  className='form-control' style={{width:'100%',height:'100px'}} type="text" onChange={(e)=>setDesc(e.target.value)}  required/> <br />
             Your Event Registration/Redirect link : <input className='form-control' style={{width:'100%',height:'40px'}} type="text" onChange={(e)=>setlink(e.target.value)}  required/> <br />

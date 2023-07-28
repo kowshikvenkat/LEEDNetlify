@@ -10,8 +10,10 @@ function PitchCommentTemplate({val,userid,email}) {
               const[opencomment,setopencomment] = React.useState("")
                     const[upvotes,setupvotes] = React.useState(val['upvotes'])
         const[disablelike,setdisablelike] = React.useState(false)
+          const[commentsubmitted,setcommentsubmitted] = React.useState(false)
      function CommentSubmitted(pitchid ,e){
   e.preventDefault()
+      setcommentsubmitted(true)
 axios.post("http://localhost:5000/addcommentST",{
     expertemail:email,
       pitchid:pitchid,
@@ -37,7 +39,7 @@ setdisablelike(false)
            <div className={window.innerWidth>500?"d-flex w-25 justify-content-between":"d-flex justify-content-between"}>  <div>{val['name']}</div>
            {(val['linkedin'] &&val['linkedin'].length>0) && <a target='_blank' href={val['linkedin']}> <img src={linkedinimg} style={{width:20,height:20}} alt="" /> </a>}
            </div>
-           <div className={window.innerWidth>500?"d-flex w-25 justify-content-between":"d-flex w-100 justify-content-between"}>
+           <div className={window.innerWidth>500?"d-flex w-50 justify-content-between":"d-flex w-100 justify-content-between"}>
             <div>{val['category']}</div>
             <div>{DateToDay(val['createdAt'].slice(0,10))}</div>
            </div>
@@ -120,8 +122,8 @@ setdisablelike(false)
                 <hr style={{width:'100%'}}/>
           <h3 style={{fontWeight:700}}>ADD / UPDATE COMMENT</h3>
       <form action="" className=' my-4 w-100 d-flex flex-column align-items-center' onSubmit={(e)=>CommentSubmitted(val["_id"],e)}>
-        <textarea type="text" rows={4} placeholder='Experts Comments come here ..' className='form-control w-75' onChange={(e)=>setcomment(e.target.value)} /> <br />
-        <input type="submit" className='btn btn-primary' value="SUBMIT" name="" id="" />
+        <textarea type="text" minLength={10} rows={4} placeholder='Experts Comments come here ..' className='form-control w-75' onChange={(e)=>setcomment(e.target.value)} /> <br />
+        <input type="submit" className={commentsubmitted?'btn btn-success':'btn btn-primary'} value={commentsubmitted?"UPDATE":"SUBMIT"} name="" id="" />
       </form>
         </div></>
   )

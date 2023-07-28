@@ -11,7 +11,6 @@ import helpdeskimg from '../Assets/help.png'
 import Footer from '../Models/footer'
 import MenuST from '../Models/SharkTank/menuST';
 import { useDispatch } from 'react-redux';
-import { setPitches } from '../Controllers/redux';
 import { setyourpitch } from '../Controllers/redux';
 const cryptojs = require("crypto-js")
 
@@ -37,14 +36,7 @@ setuserid(()=>bytesuserid.toString(cryptojs.enc.Utf8))
 React.useEffect(()=>{
 
 })
-    React.useEffect(()=>{
-   axios({
-    method: "GET",
-    url: "http://localhost:5000/pitchesST",
-  }).then((res)=>{
-
-dispatch(setPitches(res.data.docs))
-  })  },[])
+  
   React.useEffect(()=>{
 
 if(userid){
@@ -56,9 +48,9 @@ if(userid){
 
     })
   return (
-    <div className=' ' style={{marginTop:'80px',}}>
+    <div className=' ' style={{marginTop:'70px',}}>
      <div id='SThead'>
-       <h1 style={{fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>DIGITAL SHARKTANK - <img src={leedimg} style={{width:250,height:80}} alt="" /></h1>
+       <h1 style={{fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>DIGITAL FLAGSHIP - <img src={leedimg} style={{width:250,height:80}} alt="" /></h1>
      </div>
 
 

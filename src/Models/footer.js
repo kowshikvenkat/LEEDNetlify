@@ -5,7 +5,9 @@ import goalpic from '../Assets/goal.png'
 import menupic from '../Assets/menu.png'
 import uparrow from '../Assets/arrow-up.png'
 import LazyLoad from 'react-lazyload'
+import { useNavigate } from 'react-router-dom'
 function Footer() {
+  const navigate = useNavigate()
   return (
     <LazyLoad height={200} offset={100} once>
 <footer className='d-flex flex-column bg-light ' style={{boxShadow:'0 -5px 5px -5px grey',width:'99vw'}}>
@@ -14,16 +16,7 @@ function Footer() {
    <img src={logo1} style={{width:'40%',height:200,objectFit:'contain',}} alt="" />
  </div>
   <div className='span_div_home w-100 '>
-    <div className='text-dark text-start mx-3'>
-    <br />
-<br />
-      <h5 style={{fontWeight:'800'}}>PARTNERS</h5> 
-      <br />
-      <p className='text-start'>BOSCH</p>
-            <p>GLOBAL</p>
-                  <p>INDIANA</p>
-    </div>
-     <div className='text-dark  text-start mx-5'>
+     <div style={{cursor:'pointer'}} onClick={()=>navigate("/contact")}  className='text-dark  text-start mx-5'>
     <br />
 <br />
       <h5 style={{fontWeight:'800'}}>KNOW US</h5> 
@@ -32,14 +25,14 @@ function Footer() {
             <p>MAIL</p>
                   <p>MOBILE</p>
     </div>
-        <div className='text-dark  text-start '>
+        <div style={{cursor:'pointer'}} className='text-dark  text-start '>
     <br />
 <br />
       <h5 style={{fontWeight:'800'}}>CONNECT</h5> 
       <br />
-      <p className='text-start'>LINKEDIN</p>
-            <p>INSTAGRAM</p>
-                  <p>FACEBOOK</p>
+      <p className='text-start' onClick={()=> window.open(`https://www.linkedin.com/company/leed-kumaraguru-college/`, '_blank')}>LINKEDIN</p>
+            <p onClick={()=> window.open(`https://instagram.com/leed_kumaraguru?igshid=MzRlODBiNWFlZA==`, '_blank')}>INSTAGRAM</p>
+                  <p onClick={()=> window.scrollTo(0, 390)}>YOUTUBE</p>
                     
     </div>
 

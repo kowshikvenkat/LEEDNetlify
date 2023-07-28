@@ -52,7 +52,7 @@ setdisablelike(false)
     <div className='pitch bg-light my-3 p-1' style={{boxShadow:'0 0 10px grey',borderRadius:20,width:'95%'}}>
            <div style={{background:'rgba(200,200,200,0.5)',fontWeight:500,borderTopRightRadius:20,borderTopLeftRadius:20,letterSpacing:'2px'}} className={window.innerWidth>500?"d-flex justify-content-between p-4":"d-flex p-3 flex-column align-items-center"}>
            <div className={window.innerWidth>500?"d-flex w-25 justify-content-between align-items-center":"d-flex justify-content-between"}>  <div>{val['name']}</div>     {(val['linkedin'] &&val['linkedin'].length>0) && <a target='_blank' href={val['linkedin']}> <img src={linkedinimg} style={{width:20,height:20}} alt="" /> </a>}</div>
-           <div className={window.innerWidth>500?"d-flex w-25 justify-content-between align-items-center":"d-flex w-100 justify-content-between"}>
+           <div className={window.innerWidth>500?"d-flex w-50 justify-content-between align-items-center":"d-flex w-100 justify-content-between"}>
             <div>{val['category']}</div>
             <div>{DateToDay(val['createdAt'].slice(0,10))}</div>
            </div>

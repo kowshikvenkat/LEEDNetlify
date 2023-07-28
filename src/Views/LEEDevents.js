@@ -34,7 +34,7 @@ function LEEDevents() {
   setrenderevents("returnallevents")
 let id = queryParams.get('id')
 
-if(id){
+if(id&&id!="leedevents"){
   setqueryid(id )
 let filtered = verifiedevents.filter(event => event["_id"] !== id).sort((a, b) => new Date(b.startdate) - new Date(a.startdate))
 verifiedevents.filter(event => event["_id"] == id).map((val,ind)=>{
@@ -81,12 +81,12 @@ return <div style={{display:'flex',flexDirection:'column'}}  className='w-100'>
         )}
        </div>
 <div className="w-100 d-flex justify-content-center">
-  <div className={window.innerWidth>600?"d-flex w-75  my-5":"d-flex flex-column align-items-center w-100 my-5"} style={{backgroundColor:'rgba(164,219,232,0.2)',borderRadius:'40px'}}>
-  <div className='d-flex flex-column w-50 align-items-center justify-content-center'>
+  <div className={window.innerWidth>600?"d-flex flex-column w-75  my-5":"d-flex flex-column align-items-center w-100 my-5"} style={{backgroundColor:'rgba(164,219,232,0.2)',borderRadius:'40px'}}>
+  <div className='d-flex flex-column align-items-center justify-content-center'>
           {value['pic'].map((val,ind)=>
-        <img loading='lazy' src={val['secure_url']} alt="" style={{objectFit:'contain',width:'70%',height:'100%'}} />)}
+        <img loading='lazy' src={val['secure_url']} alt="" style={{objectFit:'contain',width:'70%',height:'100%',maxHeight:'400px'}} />)}
 </div>
-        <div className='d-flex px-1 w-50 flex-column justify-content-center align-items-around'>
+        <div className='d-flex px-1 flex-column justify-content-center align-items-around'>
            <p>{value['desc']}</p>
          <div className='d-flex' style={{flexWrap:'wrap'}}>
           <h4 className='text-success '>When : </h4>

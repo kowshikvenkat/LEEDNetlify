@@ -36,21 +36,6 @@ app.use(express.urlencoded({limit:"50mb"}))
 app.use(cors());
 app.listen(port, () => console.log("Backend server live on " + port));
 
-
-const Loginschema = new mongoose.Schema({
- email:String,
-  title:String,
-  desc:String,
-  createdAt:String,
-  admin1:Boolean,
-  admin2:Boolean,
-  upvotes:{
-  count:Number,
-  ids:[String]
-},
-comments:[Object]
-})
-
 const Userschema = new mongoose.Schema({
   name:String,
   email:String,
@@ -58,10 +43,7 @@ const Userschema = new mongoose.Schema({
  linkedIn:String,
  saved:[]
 })
-const User = mongoose.model('pendingpitches',Loginschema)
-const User2 = mongoose.model('verifiedpitches',Loginschema)
 const User3 =mongoose.model('users',Userschema)
-
 
 app.post('/createuser',(req,res)=>{
   var user={
@@ -72,7 +54,7 @@ app.post('/createuser',(req,res)=>{
   }
   User3.find({email:user.email},function(err,docs){
           if(docs.length==0){
- User3.insertMany(user).then((result)=>{console.log("Added to users");res.send({id:result[0]["_id"]})}).catch((err)=>console.log(err))
+ User3.insertMany(user).then((result)=>{console.log("New user added");res.send({id:result[0]["_id"]})}).catch((err)=>console.log(err))
           }
           else{
           console.log('useralready exists')
@@ -80,100 +62,8 @@ app.post('/createuser',(req,res)=>{
         }
   })
 })
-
-app.post('/addpendingrequest',(req,res)=>{
-  let s = new Date().toISOString().slice(0,10)
-  var user={
-    email:req.body.email,
-title:req.body.title,
-desc:req.body.desc,
-createdAt:s,
-admin1:false,
-admin2:false,
-
-  }
-
- User.insertMany(user).then(()=>console.log("Added to pendingpitches")).catch((err)=>console.log(err))
-})
-
-
-
-app.get("/pendingdata",(req,res)=>{
-    let user=[];
-User.find({},function(err,docs){
-  docs.map((val,index)=>{
-
-  User3.find({email:docs[index]['email']},function(err,userdocs){
-
-  var newuser=
-  {
-    name:userdocs[0].name,
-    pic:userdocs[0].pic,
-    title:docs[index]['title'],
-    desc:docs[index]['desc'],
-    createdAt:docs[index]['createdAt'],
-    _id:docs[index]['_id'],
-     admin1:docs[index]['admin1'],
-          admin2:docs[index]['admin2'],
-  }
-  user.push(newuser)
-
-if(user.length==docs.length)
-res.send({pendingdata:user})
-})
-
-})
- 
-
-})
-})
-
-app.post('/updatecommentverifiedpitch',(req,res)=>{
-User2.update({_id:req.body.peerid},{
- $push:{ comments:{commentedemail:req.body.expertid,comment:req.body.updatecomment}}
-}).then((res)=>console.log("updated"))
-})
-
-app.post('/updateupvotesverifiedpitch',(req,res)=>{
-  User2.findOne({_id:req.body.verifiedpitchid},function(err,docs){
-    
-if(!docs['upvotes']['ids'].includes(req.body.peerid)){
-User2.update({_id:req.body.verifiedpitchid},{
-  "upvotes.count":docs['upvotes']['count']+1,
-  $push:{"upvotes.ids":req.body.peerid}
-  
-}).then((res)=>console.log("updated"))
-}else{
-  console.log("included")
-  User2.update({_id:req.body.verifiedpitchid},{
-      "upvotes.count":docs['upvotes']['count']-1,
-      $pull:{"upvotes.ids":req.body.peerid}
-  }).then((res)=>console.log("updated"))
-}
-  })
-
-})
-app.post("/updatesavedpitch",(req,res)=>{
-  User3.findOne({email:req.body.email},function(err,docs){
-    let exists = false
-   console.log( docs['saved'])
-   if(docs['saved'].length==0){
-  User3.update({email:req.body.email},{ $push:{saved:req.body.savedid} }).then(()=>"saved the pitch")
-   }
-   else{
-     docs['saved'].map((value,index)=>{
-if(value==req.body.savedid){
-  User3.update({email:req.body.email},{ $pull:{saved:req.body.savedid}}).then(()=>"saved the pitch")
-  exists = true;
-}else if(value!=req.body.savedid&&index+1==docs['saved'].length &&exists==false){
-  User3.update({email:req.body.email},{ $push:{saved:req.body.savedid}}).then(()=>"saved the pitch")
-}
-    })
-   }
-  })
-})
-
 const RegisterSchema = new mongoose.Schema({
+  Account:String,
  Institution:String,
        Email:String,
        Title:String,
@@ -187,6 +77,7 @@ const RegisterUser = mongoose.model('pendingregisters',RegisterSchema)
 const AcceptRegisterUser = mongoose.model('verifiedeventregisters',RegisterSchema)
 app.post("/requestevent",(req,res)=>{
   let user = {
+    Account:req.body.Account,
      Institution:req.body.Institution,
        Email:req.body.Email,
        Title:req.body.Title,
@@ -204,11 +95,11 @@ app.get("/getpendingregisters",(req,res)=>{
   })
 })
 app.post("/accepteventrequest",(req,res)=>{
-RegisterUser.findOne({_id:req.body.id},function(err,docs){
+RegisterUser.findOne({_id:req.body.id},async function(err,docs){
 
 if(docs){
     if(docs.admin&&docs.admin!=req.body.email){
-      AcceptRegisterUser.insertMany(docs).then(res=>console.log("added to verified events"))
+     await AcceptRegisterUser.insertMany(docs).then(res=>console.log("added to verified events"))
   RegisterUser.findOneAndDelete({_id:req.body.id},function(err,docs){
         console.log("deleted from pending registers")
       })
@@ -301,9 +192,9 @@ app.post("/getpendingKCTLEEDevents",(req,res)=>{
 
 })
 app.post("/acceptKCTLEEDevents",(req,res)=>{
-EventModel.find({_id:req.body.id},function(err,docs){
-EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending LEED evsnts"))
- VerifiedEventModel.insertMany(docs).then(console.log("added to verified KCTLEED events"))
+EventModel.find({_id:req.body.id},async function(err,docs){
+  await VerifiedEventModel.insertMany(docs).then(console.log("added to verified KCTLEED events"))
+EventModel.deleteOne({_id:req.body.id}).then(console.log("removed from pending LEED events"))
 })
 })
 app.post("/rejectKCTLEEDevents", async (req, res) => {
@@ -357,10 +248,10 @@ app.get("/getpendingblockedusers",(req,res)=>{
   })
 })
 app.post("/acceptblockuser",(req,res)=>{
-  PendingBlockModel.findOne({_id:req.body.id},function(err,docs){
+  PendingBlockModel.findOne({_id:req.body.id},async function(err,docs){
 if(docs){
+   await BlockModel.findOneAndUpdate({_id:'645d2634357536481927cf39'},{$push:{BlockedUsers:docs.Useremail}}).then(console.log("User Blocked"))
   PendingBlockModel.findOneAndDelete({_id:req.body.id}).then(console.log("User removed from pending block"))
-  BlockModel.findOneAndUpdate({_id:'645d2634357536481927cf39'},{$push:{BlockedUsers:docs.Useremail}}).then(console.log("User Blocked"))
 }
   })
 })
@@ -369,8 +260,24 @@ app.get("/getverifiedblockedusers",(req,res)=>{
     res.send({docs:docs})
   })
 })
-
-
+const YTRef = new mongoose.Schema({
+  YTLink:String,
+})
+const YTRefModel = mongoose.model('YTreferral',YTRef)
+app.post("/YTreferral",(req,res)=>{
+  let user={
+    YTLink:req.body.ytlink
+  }
+YTRefModel.insertMany(user).then(()=>console.log("Added YT Referrals"))
+})
+app.get("/getYTReferral",(req,res)=>{
+  YTRefModel.find({},function(err,docs){
+res.send({docs:docs})
+  })
+})
+app.post("/removeytreferral",(req,res)=>{
+   YTRefModel.deleteOne({_id:req.body.id}).then(()=>   console.log("Removed YT Referral"))
+})
 //SHARKTANK-------->
 const STPitch = new mongoose.Schema({
   userid:String,
@@ -436,11 +343,11 @@ app.get("/pendingpitchST",async (req, res) => {
   }
 })
 app.post("/requestacceptST",(req,res)=>{
-pendingpitchST.findOne({_id:req.body.id},function(error,docs1){
+pendingpitchST.findOne({_id:req.body.id}, function(error,docs1){
   if(docs1&&req.body.admin=="admin1"){
-  pendingpitchST.findOneAndUpdate({_id:req.body.id},{admin1:true},function(err,docs){
+  pendingpitchST.findOneAndUpdate({_id:req.body.id},{admin1:true},async function(err,docs){
  if(docs.admin2==true){
-  PitchST.insertMany(docs).then(()=>console.log("Added to SharkTank pitchs"))
+  await PitchST.insertMany(docs).then(()=>console.log("Added to SharkTank pitchs"))
   pendingpitchST.findOneAndRemove({_id:req.body.id}).then(()=>console.log("Removed from SharkTank pending pitchs"))
  }
   })

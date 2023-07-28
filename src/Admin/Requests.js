@@ -332,7 +332,9 @@ addaxiosfunction()
         axios.post("http://localhost:5000/acceptblockuser",{
           id:value['_id']
         })
+        window.location.reload()
       }
+
     }}>BLOCK</button>
     <hr className='w-100'/>
    </div>
@@ -342,7 +344,8 @@ addaxiosfunction()
 {pendingregisters.map((value,index)=>
 <div className='my-5 w-75 p-2' style={{boxShadow:'0 0 10px grey'}}>
   <h5>From <b>{value['Institution']}</b></h5>
-<p className='' style={{float:'left'}}>Person To Contact - <a rel="noreferrer" target="_blank" href={`mailto:${value['Email']}`}>{value['Email']}</a></p><br /><br />
+  <p style={{float:'left',border:'1px solid black',padding:'1%'}}>ACCOUNT - <a rel="noreferrer" target="_blank" href={`mailto:${value['Account']}`}>{value['Account']}</a></p> <br /><br />
+<p className='w-100 d-flex justify-content-start'>Person To Contact - <a rel="noreferrer" target="_blank" href={`mailto:${value['Email']}`}>{value['Email']}</a></p><br />
 <h5>{value['Title']}</h5>
 <p>{value['Desc']}</p>
 {value['Link']!=null&& <a target="_blank" rel="noreferrer" href={value['Link']}>Registeration/Redirect Link</a>}

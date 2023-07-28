@@ -7,11 +7,13 @@ import Switch from "react-switch";
 import { Link,Outlet,useNavigate } from 'react-router-dom';
 import GeneralEvents from './generalevents';
 import LEEDevents from './LEEDevents';
+import { toast,ToastContainer } from "react-toastify";
 import calendarimg from '../Assets/calendar.png'
 import KCTImage from '../Assets/KCTLOGO.png'
 import { useLocation } from 'react-router-dom';
 function Events() {
       let location = useLocation()
+      const navigate = useNavigate()
   const [checked, setChecked] = React.useState(false);
   const handleChange = nextChecked => {
     setChecked(nextChecked);
@@ -24,7 +26,7 @@ function Events() {
   handleChange(true)
  },[])
   return (
-    <div style={{marginTop:'100px',background:'white'}} >
+    <div style={{marginTop:'90px',background:'white'}} >
 <h1 style={{fontFamily:'Bebas Neue',width:'100%'}} className='text-success'>Events Schedule</h1>
 <div>
 <div className="d-flex justify-content-center ">
@@ -52,7 +54,15 @@ function Events() {
 <p className={window.innerWidth>500?'text-primary  w-50 d-flex align-items-center mt-2':'text-primary mt-2 text-start p-1'}><img src={infopic} style={{height:30,width:30}} alt="" />Events from organizations are accepted .</p>
 <p className={window.innerWidth>500?'text-primary text-light w-50 d-flex align-items-center mt-2':'text-primary mt-2 text-start text-light p-1'} style={{background:'rgba(0,0,0,0.5)'}}><img src={infopic} style={{height:30,width:30}} alt="" />Events from individuals will not be entertained !</p>
 <img src={KCTImage} style={{height:'20%',width:'40%'}} alt="" />
-  <Link to="/eventregister" className={window.innerWidth>500?'btn btn-primary my-3 w-25':'btn btn-primary my-3 w-75'}>Register Your Event </Link> 
+  <Link to={sessionStorage.getItem('email')&&"/eventregister"} onClick={()=>{
+    if(!sessionStorage.getItem('email')){
+        toast.warning(<div className='d-flex align-items-center'>Kindly <div className='text-primary mx-1' onClick={()=>navigate("/login")}> Login </div> before registration</div>,{
+            autoClose:5000,
+            position:toast.POSITION.BOTTOM_CENTER
+          })
+    }
+  }}  className={window.innerWidth>500?'btn btn-primary my-3 w-25':'btn btn-primary my-3 w-75'}>Register Your Event </Link> 
+    <ToastContainer />
 </div>
 <br /><br />
 </div>:  <LEEDevents />}

@@ -13,16 +13,11 @@ import { NavLink } from 'react-router-dom';
 import './sidebar.css'
 export const SidebarEvent = ({choosepicker,bgcolor,helpdesk}) => {
   const[ActiveMenu,setActiveMenu] = React.useState(0)
-    const [sidebarVisible, setSidebarVisible] = React.useState(true);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
-  };
   return (
  <div 
       style={{ display: 'flex', height: 'auto', overflow: 'scroll initial', }}
     >
-      <CDBSidebar className='border'  textColor={bgcolor!==undefined?'black':'white'} backgroundColor={bgcolor!==undefined?bgcolor:'#333'} opened={false}>
+      <CDBSidebar className='border'  textColor={bgcolor!==undefined?'black':'white'} backgroundColor={bgcolor!==undefined?bgcolor:'#333'} >
         <CDBSidebarHeader  hideElementOnCollapse prefix={<i className="fa fa-bars fa-large"></i>}>
           <a
             href="#"
@@ -79,9 +74,9 @@ export const SidebarAdmin = ({choosepicker,bgcolor}) => {
       style={{ display: 'flex', height: 'auto', overflow: 'scroll initial' }}
     >
       <CDBSidebar className='border' textColor={bgcolor!==undefined?'black':'white'} backgroundColor={bgcolor!==undefined?bgcolor:'#333'}>
-        <CDBSidebarHeader style={{}} prefix={<i className="fa fa-bars fa-large"></i>}>
+        <CDBSidebarHeader hideElementOnCollapse prefix={<i className="fa fa-bars fa-large"></i>}>
           <a
-            href="/"
+            href="#"
             className="text-decoration-none"
             style={{ color: 'inherit' }}
           >
@@ -99,7 +94,7 @@ export const SidebarAdmin = ({choosepicker,bgcolor}) => {
               <CDBSidebarMenuItem style={{backgroundColor:ActiveMenu=='todayevents'?'black':'white',color:ActiveMenu=='todayevents'?'white':'black',transition:'0.5s'}} icon="table">SharkTank Events</CDBSidebarMenuItem>
             </NavLink>
             <NavLink className={bgcolor==undefined?ActiveMenu=='futureevents'?'text-warning':'text-light':'text-dark'} onClick={()=>{choosepicker('returnfutureevents');setActiveMenu('futureevents')}} >
-              <CDBSidebarMenuItem style={{backgroundColor:ActiveMenu=='futureevents'?'black':'white',color:ActiveMenu=='futureevents'?'white':'black',transition:'0.5s'}} icon="user">LEED Notifications</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem style={{backgroundColor:ActiveMenu=='futureevents'?'black':'white',color:ActiveMenu=='futureevents'?'white':'black',transition:'0.5s'}} icon="user">Event Notifications</CDBSidebarMenuItem>
             </NavLink>
             <NavLink className={bgcolor==undefined?ActiveMenu=='overevents'?'text-warning':'text-light':'text-dark'} onClick={()=>{choosepicker('returncompletedevents');setActiveMenu('overevents')}} >
               <CDBSidebarMenuItem style={{backgroundColor:ActiveMenu=='overevents'?'black':'white',color:ActiveMenu=='overevents'?'white':'black',transition:'0.5s'}} icon="chart-line">
@@ -110,13 +105,24 @@ export const SidebarAdmin = ({choosepicker,bgcolor}) => {
           </CDBSidebarMenu>
         </CDBSidebarContent>
 <hr />
+     {/* <div
+            
+            className={bgcolor==undefined?ActiveMenu=='helpdesk'?'text-warning sidebar-btn-wrapper':'text-light sidebar-btn-wrapper':'text-dark'}
+            style={{
+              padding: '20px 5px',cursor:'pointer'
+            }}
+             onClick={()=>{setActiveMenu('helpdesk');helpdesk(true)}}
+          >
+          
+         <CDBIcon fab size='lg' border icon="stack-overflow"/> <p>HELP DESK</p>
+          </div> */}
         <CDBSidebarFooter style={{ textAlign: 'center' }}>
           <div
             className="sidebar-btn-wrapper"
-          style={{backgroundColor:ActiveMenu=='helpdesk'?'black':'white',color:ActiveMenu=='helpdesk'?'white':'black',transition:'0.5s',padding:'20px 50px',fontWeight:800,cursor:'pointer'}}
+          style={{backgroundColor:ActiveMenu=='helpdesk'?'black':'white',color:ActiveMenu=='helpdesk'?'white':'black',transition:'0.5s',padding:'20px 5px',fontWeight:800,cursor:'pointer'}}
             onClick={()=>{choosepicker('returnhelpdesk');setActiveMenu('helpdesk')}}
           >
-           <CDBIcon  fab size='lg' border icon="stack-overflow"/>Help Desk
+           <CDBIcon  fab size='lg' border icon="stack-overflow"/><p>HELP DESK</p>
           </div>
         </CDBSidebarFooter>
       </CDBSidebar>

@@ -54,9 +54,9 @@ dispatch(setexpertPitches(res.data.docs))
   }
     },[Email])
   return (
-    <div className=' ' style={{marginTop:'80px',}}>
+    <div className=' ' style={{marginTop:'70px',}}>
     <div id='SThead'>
-           <h1 style={{fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>DIGITAL SHARKTANK - <img src={leedimg} style={{width:250,height:80}} alt="" /></h1>
+           <h1 style={{fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>DIGITAL FLAGSHIP - <img src={leedimg} style={{width:250,height:80}} alt="" /></h1>
     </div>
  
 <div className="d-flex MainST">

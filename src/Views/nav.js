@@ -41,7 +41,8 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
         listStyleType:"none",
        width:"100vw",
        position:'fixed',
-       zIndex:10000000,
+       zIndex:10000,
+    
     }
   
   return (
@@ -61,16 +62,16 @@ setUserProfilePic(()=>bytesimage.toString(cryptojs.enc.Utf8))
     </ul> */}
 <Navbar style={{backgroundColor:'rgba(38, 194, 129, 1)',boxShadow:'0 0 20px grey'}} expand="md">
       <Container fluid>
-        <Navbar.Brand className='logo' style={{width:'20%',height:'70px'}} href="#home"><img src={logopic} style={{width:"100%",height:"100%",backgroundColor:'white',margin:0,objectFit:'contain'}} alt="" /></Navbar.Brand>
+        <Navbar.Brand className='logo' style={{width:'20%',height:'60px'}} href="#home"><img src={logopic} style={{width:"100%",height:"100%",backgroundColor:'white',margin:0,objectFit:'contain'}} alt="" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto d-flex justify-content-around w-100">
             <Nav.Link  className='navitemscontainer'> <Link className='navitems' to="/" >HOME</Link></Nav.Link>
-            <Nav.Link  className='navitemscontainer'>     <Link className='navitems'>ABOUT US</Link></Nav.Link>
+            <Nav.Link  className='navitemscontainer'>     <Link to="/aboutus"className='navitems'>ABOUT US</Link></Nav.Link>
              <Nav.Link className='navitemscontainer'>       <Link className='navitems' to='/events'>EVENTS</Link></Nav.Link>
-              <Nav.Link  className='navitemscontainer'>     <Link className='navitems'>  CONTACT</Link></Nav.Link>
+              <Nav.Link  className='navitemscontainer'>     <Link to="/contact" className='navitems'>  CONTACT</Link></Nav.Link>
                
-               <Nav.Link className='navitemscontainer'>           <Link className='navitems' to={(Email=="kowshik.20ei@kct.ac.in"||Email=="jeevankumar.20ei@kct.ac.in"||Email=="harihaaran.20ei@kct.ac.in")?"/sharktankexpert":Email.length>0? "/sharktank":"/login" }>SHARKTANK</Link> </Nav.Link>
+               <Nav.Link className='navitemscontainer'>           <Link className='navitems' to={(Email=="kowshik.20ei@kct.ac.in"||Email=="jeevankumar.20ei@kct.ac.in"||Email=="harihaaran.20ei@kct.ac.in")?"/sharktankexpert":Email.length>0? "/sharktank":"/login" }>FLAGSHIP</Link> </Nav.Link>
                 
           <Nav.Link className={!userName.length>0&& 'navitemscontainer'}>           <li >{userName.length>0?
                    <NavDropdown style={{marginRight:40,marginTop:-10}} title={<i style={{color:'white',textDecoration:'underline'}}>{userName}</i>} id="basic-nav-dropdown">

@@ -5,10 +5,31 @@ import contentimage from '../Assets/eventcontent.png'
 import pdfimage from '../Assets/eventpdf.png'
 import Modal from 'react-bootstrap/Modal'
 import axios from 'axios'
+import YouTube from 'react-youtube';
 function Helpdesk({Email}) {
       const [selectedImage, setSelectedImage] = React.useState(headingimage);
       const [show, setShow] = React.useState(false);
       const[UserEmail,setUserEmail] = React.useState("")
+const[ytlink,setytlink] = React.useState()
+     const[YTvideos,setYTvideos] = React.useState([])
+ React.useEffect(()=>{
+       axios({
+    method: "GET",
+    url: "http://localhost:5000/getYTReferral",
+  }).then((res)=>{
+setYTvideos(res.data.docs)
+  })
+  },[])
+      function HostYoutube(e){
+if(YTvideos.length<4){
+  axios.post("http://localhost:5000/YTreferral",{
+  ytlink:ytlink
+})
+}else{
+  e.preventDefault()
+  alert("Kindly remove one youtube referral")
+}
+      }
   return (
     <div>
       <div className='d-flex flex-column align-items-around'>
@@ -19,8 +40,45 @@ function Helpdesk({Email}) {
                        <button onClick={()=>setSelectedImage(benefitsimage)} className='btn btn-info text-light'>Additional Info , Benefits</button>
                         <button onClick={()=>setSelectedImage(pdfimage)} className='btn btn-info text-light'>Pdf, Registeration Form</button>
    </div>
-    <img src={selectedImage} style={{width:'100%',margin:'1%',height:'auto'}} alt="Selected" />
+    <img src={selectedImage} style={{width:'95%',margin:'1%',height:'auto'}} alt="Selected" />
       </div>
+      <hr />
+  <h3 style={{fontFamily:'Nunito Sans ',fontWeight:800}} className='text-danger'>YOUTUBE REFERRAL</h3>
+
+<div className="border border-dark p-1 ">
+<h4>CURRENT YT REFERRALS</h4>
+<div className="w-100" style={{display:'flex',flexWrap:'wrap'}}>
+     {YTvideos.map((val,ind)=>(
+
+
+  <div className='m-1'> <YouTube
+          videoId={val.YTLink.substring(val.YTLink.lastIndexOf('/') + 1)}
+opts={{
+  width:window.innerWidth>450?'400':'200',
+  height:'300'
+}}
+        />
+        <button className='btn btn-danger' onClick={()=>{
+            if(window.confirm("Confirm again to remove yt referral")){
+      axios.post("http://localhost:5000/removeytreferral",{
+id:val["_id"]
+          })
+            }
+              window.location.reload()
+        }}>Remove</button>
+        </div>
+
+        ))}
+</div>
+</div>
+<br />
+<hr />
+  <form action="" onSubmit={HostYoutube} className='d-flex flex-column align-items-center justify-content-center'>
+  <label htmlFor=""><b>ADD YT REFERRAL - Paste only Youtube link , avoid texts and other links</b></label>
+    <input type="text" className='form-control w-75 my-2' onChange={(e)=>setytlink(e.target.value)} placeholder='Paste Youtube link' required/>
+   <input type="submit" className='btn btn-success' value="HOST" />
+
+  </form>
       <hr />
       <h3 style={{fontFamily:'Nunito Sans ',fontWeight:800}} className='text-danger'>BLOCK A USER</h3>
 <div className='w-75 d-flex flex-column align-items-start mx-5'>

@@ -237,7 +237,7 @@ if(val=="All"){
       <br /><br />
       <hr style={{width:'100%'}}/>
       <br />
-<h2 style={{background:'rgba(3, 201, 169, 0.2)',padding:5,borderRadius:5,fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>SHARKTANK <img src={discussionpic} style={{width:80,height:80}} alt="" /> PITCHES </h2> 
+<h2 style={{background:'rgba(3, 201, 169, 0.2)',padding:5,borderRadius:5,fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>FLAGSHIP <img src={discussionpic} style={{width:80,height:80}} alt="" /> PITCHES </h2> 
          <Pitches />
 
     </div>

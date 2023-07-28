@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 function Createevents({Email}) {
+    const[disableBTN,setdisableBTN] = React.useState(false)
       const [addvideo,setaddvideo] = React.useState(1)
                 const[videofile,setvideofile] = React.useState([])
      const [addimage,setaddimage] = React.useState(1)
@@ -21,11 +22,8 @@ function Createevents({Email}) {
       const[videouploaderr,setvideouploaderr] = React.useState()
          let imageuploading = React.useRef(false)
    let videouploading = React.useRef(false)
-React.useEffect(()=>{
-// console.log(videofile[0])
-})
                     async function Eventhandler(e){
-
+setdisableBTN(true)
 e.preventDefault()
 let benefits = []
 let info =[]
@@ -92,6 +90,7 @@ email:Email,
 })
 
 }
+setdisableBTN(false)
 window.location.reload()
 
   }
@@ -225,7 +224,7 @@ setpdffile(prev=>prev.filter(item=>!value.includes(item.name)))
       )}
 </div>
                        </div> <br /><br />
-                <input type="submit"  className='btn btn-primary w-25' style={{fontSize:20,boxShadow:'0 0 5px grey'}} value="Add Event" />
+                <input type="submit" disabled={disableBTN}  className='btn btn-primary w-25' style={{fontSize:20,boxShadow:'0 0 5px grey'}} value="Add Event" />
       </form>
     </div>
   )

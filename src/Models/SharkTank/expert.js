@@ -14,8 +14,11 @@ function ExpertReportST({email,pitchid}) {
     const[future,setfuture] = React.useState(0)
     const[impact,setimpact] = React.useState(0)
   const[comment,setcomment] = React.useState("")
+  const[reportsubmitted,setreportsubmitted] = React.useState(false)
+  const[commentsubmitted,setcommentsubmitted] = React.useState(false)
 function Submitted(e){
   e.preventDefault()
+  setreportsubmitted(true)
 axios.post("http://localhost:5000/addreportST",{
   expertemail:email,
   pitchid:pitchid,
@@ -33,6 +36,7 @@ axios.post("http://localhost:5000/addreportST",{
   }
   function CommentSubmitted(e){
     e.preventDefault()
+    setcommentsubmitted(true)
 axios.post("http://localhost:5000/addcommentST",{
     expertemail:email,
       pitchid:pitchid,
@@ -135,7 +139,7 @@ axios.post("http://localhost:5000/addcommentST",{
                       <td><input type="radio" name='future' onChange={(e)=>setfuture(e.target.value)} value='5'/></td>
         </tr>
         <tr>
-         <td colSpan={6} style={{padding:5}}><button className='btn btn-primary'>ADD REPORT</button></td>
+         <td colSpan={6} style={{padding:5}}><button className={reportsubmitted?'btn btn-success':'btn btn-primary'}>{reportsubmitted?"UPDATE REPORT":"ADD REPORT"}</button></td>
 
      
         </tr>
@@ -145,8 +149,8 @@ axios.post("http://localhost:5000/addcommentST",{
       <hr style={{width:'100%'}}/>
           <h3 style={{fontWeight:700}}>ADD COMMENT</h3>
       <form action="" className=' my-4 w-100 d-flex flex-column align-items-center' onSubmit={CommentSubmitted}>
-        <textarea type="text" rows={4} placeholder='Experts Comments come here ..' className='form-control w-75' onChange={(e)=>setcomment(e.target.value)} />
-        <input type="submit" className='btn btn-primary' value="SUBMIT" name="" id="" />
+        <textarea type="text" rows={4} minLength={10} placeholder='Experts Comments come here ..' className='form-control w-75' onChange={(e)=>setcomment(e.target.value)} />
+        <input type="submit" className={commentsubmitted?'btn btn-success':'btn btn-primary'} value={commentsubmitted?"UPDATE":"SUBMIT"} name="" id="" />
       </form>
     </div>
   )

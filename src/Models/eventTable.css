@@ -9,7 +9,7 @@ width: 100%;
 }
 .eventContainer::-webkit-scrollbar{
     height:5px;
-  
+  width:5px;
 }
 .eventContainer::-webkit-scrollbar-track {
     background-color: grey;

@@ -66,7 +66,7 @@ setuserid(()=>bytesuserid.toString(cryptojs.enc.Utf8))
 
   return (
     <div  className=' d-flex flex-column align-items-center bg-light my-2 ' style={{width:'95%',boxShadow:' 0 0 10px rgba(3, 201, 169, 0.2)'}}>
-    {expert&&<h2 style={{background:'rgba(3, 201, 169, 0.2)',padding:5,borderRadius:5,fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>SHARKTANK <img src={discussionpic} style={{width:80,height:80}} alt="" /> PITCHES </h2>}
+    {expert&&<h2 style={{background:'rgba(3, 201, 169, 0.2)',padding:5,borderRadius:5,fontWeight:700,color:'white',textShadow:'0 1px 3px black'}}>FLAGSHIP <img src={discussionpic} style={{width:80,height:80}} alt="" /> PITCHES </h2>}
    <div style={{background:'rgba(38, 194, 129, 1)'}} className='d-flex  flex-column align-items-center w-100 border border-dark'><div className='text-light d-flex align-items-center' style={{fontSize:'30px',fontFamily:'Nunito',fontWeight:200}}>StartUp Ideas From Students Across The Globe &nbsp; <img src={globepic} style={{width:30,height:30}} alt="" /> </div>
     <div className='w-50 d-flex justify-content-end'> <hr  style={{width:'15%',background:'white',border:'0.5px solid brown'}} size="15"   /> </div>
     </div>
